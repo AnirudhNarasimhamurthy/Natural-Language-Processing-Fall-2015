@@ -68,8 +68,8 @@ bigrams_unigrams_vocabulary=Counter(vocabulary_repeated)
 bigrams_unigrams_vocabulary['#']=count_hash
         
 #print 'Vocabulary is :',bigrams_vocabulary   
-print 'Number of times # occurs is :', bigrams_unigrams_vocabulary['#']     
-print 'Number of times i occurs is :', bigrams_unigrams_vocabulary['i']  
+#print 'Number of times # occurs is :', bigrams_unigrams_vocabulary['#']     
+#print 'Number of times i occurs is :', bigrams_unigrams_vocabulary['i']  
 
 
 ################ BIGRAM PROCESSING ########################################
@@ -94,7 +94,7 @@ bigrams_vocabulary=Counter(bigrams_source_data)
 
 #print bigrams_vocabulary
 
-print bigrams_vocabulary[('#', 'i')]
+#print bigrams_vocabulary[('#', 'i')]
 
         
 
@@ -121,7 +121,7 @@ def unigrams_prob(sentence):
 		else:
 			prob_value += math.log(a/float(b),2)
 
-	return prob_value
+	return round(prob_value,4)
 
 
 
@@ -133,26 +133,21 @@ def bigrams_prob(sentence):
 	prob_value=0
 	data_array=sentence.split(" ")
 	data_array=filter(lambda a:a!='',data_array)
-	
-	
-	#print data_array
-	if(len(data_array) < 2):
-		return 'undefined'
-		
+			
 	data_array.insert(0,'#')
 	
 	for i in range(0, len(data_array)-1):
 	
 		
-		print 'word is:',(data_array[i],data_array[i+1])
+		#print 'word is:',(data_array[i],data_array[i+1])
 		#print 'Freq count of word:', bigrams_vocabulary[(data_array[i],data_array[i+1])]
 		#print 'Total frequency count:',unigram_vocabulary[data_array[i]]
 		
 		a=bigrams_vocabulary[(data_array[i],data_array[i+1])]
 		b=bigrams_unigrams_vocabulary[data_array[i]]
 	
-		print 'a is :', a
-		print 'b is :', b
+		#print 'a is :', a
+		#print 'b is :', b
 	
 		if  a == 0 :
 			return 'undefined'
@@ -160,7 +155,42 @@ def bigrams_prob(sentence):
 		else:
 			prob_value += math.log(a/float(b),2)
 
-	return prob_value
+	return round(prob_value,4)
+
+
+
+##################### SMOOTHED BIGRAM PROBABILITY FUNCTION ##########################
+
+def smoothed_bigrams_prob(sentence):
+	prob_value=0
+	data_array=sentence.split(" ")
+	data_array=filter(lambda a:a!='',data_array)
+	
+	
+	#print data_array
+	'''if(len(data_array) < 2):
+		return 'undefined' '''
+		
+	data_array.insert(0,'#')
+	
+	for i in range(0, len(data_array)-1):
+	
+		
+		#print 'word is:',(data_array[i],data_array[i+1])
+		#print 'Freq count of word:', bigrams_vocabulary[(data_array[i],data_array[i+1])]
+		#print 'Total frequency count:',unigram_vocabulary[data_array[i]]
+		
+		V=len(unigram_vocabulary.keys())
+		a=bigrams_vocabulary[(data_array[i],data_array[i+1])] + 1
+		b=bigrams_unigrams_vocabulary[data_array[i]] + V	
+		
+		prob_value += math.log(a/float(b),2)
+
+	return round(prob_value,4)
+
+
+
+
 
 
 ###################### TEST DATA PROCESSING ###############################
@@ -183,9 +213,9 @@ for data in test_data:
 
 for i in range(0, len(cleaned_data)):
   print 'S = ',cleaned_data[i]
-  print 'Unigrams:logprob(S) = %.4f' %unigrams_prob(cleaned_data[i])
-  print 'Bigrams:logprob(S) =', bigrams_prob(cleaned_data[i])
-  #print 'Smoothed Bigrams:logprob(S) =', smoothed_bigrams_prob(cleaned_data[i])	
+  print 'Unigrams:logprob(S) = ', unigrams_prob(cleaned_data[i])
+  print 'Bigrams:logprob(S) = ', bigrams_prob(cleaned_data[i])
+  print 'Smoothed Bigrams:logprob(S) =', smoothed_bigrams_prob(cleaned_data[i])	
 	
 	
 
