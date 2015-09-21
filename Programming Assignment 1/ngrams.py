@@ -216,16 +216,34 @@ for i in range(0, len(cleaned_data)):
 ###################### CREATING an N-gram Language Generator ######################
 
 
+def n_gram_language_generator(seed_word):
 
 
+	b_seed=[]
+	b_seed_count=[]
+	total_freq=0
+	# First I find all the bi-grams which start with seed_word as the first word in the tuple
+	
+	x=bigrams_vocabulary.keys()
+	
+	#print x
+	
+	for i in range(0, len(x)):
+		if x[i][0]==seed_word:
+			b_seed.append((x[i][0],x[i][1]))
+			total_freq+=bigrams_vocabulary[(x[i][0],x[i][1])]
+	
+	print b_seed
+	print total_freq
 
 
+	for i in range(0, len(b_seed)):
+		b_seed_count.append(bigrams_vocabulary[b_seed[i]] / float(total_freq))	
 
-
-
-
-
-
+	print b_seed_count
+	print sum(b_seed_count)
+	
+	#Generating a random number between 0 and 1 to decide which bigram to choose
 
 
 
@@ -248,8 +266,8 @@ for data in seeds:
 
 print seed_data
 
-for i range(0, len(seed_data)):
+for i in range(0, len(seed_data)):
 	print 'Seed =', seed_data[i]
 	print '\n'
-	#n_gram_language_generator(seed_data[i])
+	n_gram_language_generator(seed_data[i])
 	
