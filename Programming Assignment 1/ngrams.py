@@ -213,4 +213,43 @@ for i in range(0, len(cleaned_data)):
 	
 	
 
+###################### CREATING an N-gram Language Generator ######################
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####################### Seed Data Processing #########################
+#Variable declaration area
+
+seed_data=[]
+
+
+#Reading the contents of the seed file   
+
+with open(seed_file, 'r') as inputFile3:
+	seeds = inputFile3.readlines()
+	
+for data in seeds:
+	data1=data.replace("\n","")
+	data2=data1.lower().strip()
+	seed_data.append(data2)	
+
+print seed_data
+
+for i range(0, len(seed_data)):
+	print 'Seed =', seed_data[i]
+	print '\n'
+	#n_gram_language_generator(seed_data[i])
+	
