@@ -1,6 +1,8 @@
 import sys
 import itertools
 import math
+import random
+import operator
 from collections import Counter
 
 if len(sys.argv)>1:
@@ -215,13 +217,18 @@ for i in range(0, len(cleaned_data)):
 
 ###################### CREATING an N-gram Language Generator ######################
 
+iteration_counter=0
+sentence=""
+sent=[]
 
-def n_gram_language_generator(seed_word):
+def n_gram_language_generator(seed_word,iteration_counter):
 
 
 	b_seed=[]
-	b_seed_count=[]
+	b_seed_count={}
 	total_freq=0
+	if iteration_counter==0:
+		sent.append(seed_word)
 	# First I find all the bi-grams which start with seed_word as the first word in the tuple
 	
 	x=bigrams_vocabulary.keys()
@@ -233,25 +240,59 @@ def n_gram_language_generator(seed_word):
 			b_seed.append((x[i][0],x[i][1]))
 			total_freq+=bigrams_vocabulary[(x[i][0],x[i][1])]
 	
-	print b_seed
-	print total_freq
+	#print b_seed
+	#print total_freq
 
+	if len(b_seed) < 1:
+		print 'Sentence at this point is :', sent
+		return sent
 
+	# Bigrams and its corresponding probability values stored in a dictionary
 	for i in range(0, len(b_seed)):
-		b_seed_count.append(bigrams_vocabulary[b_seed[i]] / float(total_freq))	
+		b_seed_count[b_seed[i]]= bigrams_vocabulary[b_seed[i]] / float(total_freq)
 
-	print b_seed_count
-	print sum(b_seed_count)
 	
-	#Generating a random number between 0 and 1 to decide which bigram to choose
+	#b_seed_count=sorted(b_seed_count)
+	#print b_seed_count
+	#print sum(b_seed_count)
+	
+	sorted_x = sorted(b_seed_count.items(), key=operator.itemgetter(1))
+	
+	#print sorted_x
+	
 
-
+	
+	if(len(b_seed)==1):
+		w1=b_seed[0][1]
+	else:
+		
+		rand_no=random.random()
+		if(rand_no < 0.5):
+			w1=b_seed[0][1]
+		else:
+			w1=b_seed[1][1]
+	
+	print 'w1 is :', w1
+	sent.append(w1) ;
+	 
+	#print 'Sentence at this point is :', sent
+	 
+	if (w1 =='!' or w1=='.' or w1 =='?' or len(sent)== 41):
+		iteration_counter=0
+		return sent;
+	 
+	else:
+		iteration_counter=iteration_counter + 1
+		n_gram_language_generator(w1,iteration_counter)
+	 
+	 			
 
 
 ####################### Seed Data Processing #########################
 #Variable declaration area
 
 seed_data=[]
+sentence_list=[]
 
 
 #Reading the contents of the seed file   
@@ -267,7 +308,8 @@ for data in seeds:
 print seed_data
 
 for i in range(0, len(seed_data)):
+	print '*********************'
 	print 'Seed =', seed_data[i]
-	print '\n'
-	n_gram_language_generator(seed_data[i])
+	for j in range(0, 10):
+		n_gram_language_generator(seed_data[i],0)
 	
