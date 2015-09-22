@@ -224,92 +224,111 @@ final_list=[]
 x=bigrams_vocabulary.keys()
 
 
-def n_gram_language_generator(seed_word,iteration_counter):
+def n_gram_language_generator(seed_word,seed_counter,sentence_counter,iteration_counter):
 
-
+	
 	b_seed=[]
-	b_seed_count={}
+	#b_seed_count={}
+	b_seed_count=[]
 	total_freq=0
-	if iteration_counter==0:
-		#print 'True'	
-		sent.append(seed_word)
-	# First I find all the bi-grams which start with seed_word as the first word in the tuple
 	
-	for i in range(0, len(x)):
-		if x[i][0]==seed_word:
-			b_seed.append((x[i][0],x[i][1]))
-			total_freq+=bigrams_vocabulary[(x[i][0],x[i][1])]
+	if sentence_counter != 10:		
+		if iteration_counter==0:
+			#print 'True'	
+			sent.append(seed_word)
+		# First I find all the bi-grams which start with seed_word as the first word in the tuple
 	
-	print b_seed
-	#print total_freq
+		for i in range(0, len(x)):
+			if x[i][0]==seed_word:
+				b_seed.append((x[i][0],x[i][1]))
+				total_freq+=bigrams_vocabulary[(x[i][0],x[i][1])]
+	
+		#print b_seed
+		#print total_freq
 
-	if len(b_seed) < 1:
-		print 'Sentence at this point is :', sent
-		return sent
+		if len(b_seed) < 1:
+			#print 'Sentence at this point is :', sent
+			final_sent = ' '.join(sent)
+			final_list.append(final_sent)
+			return final_list
 
-	# Bigrams and its corresponding probability values stored in a dictionary
-	for i in range(0, len(b_seed)):
-		b_seed_count[b_seed[i]]= bigrams_vocabulary[b_seed[i]] / float(total_freq)
-
-	
-	#print 'Seed count with probability values is :',b_seed_count
-	sorted_bseed=sorted(b_seed_count)
-	
-	#print sum(b_seed_count)
-	
-	#sorted_x = sorted(b_seed_count.items(), key=operator.itemgetter(1))
-	
-	#print sorted_x
-	
+		# Bigrams and its corresponding probability values stored in a list of tuples where each tuple is of the form (bigram_tuple, probability_value)
+		for i in range(0, len(b_seed)):
+			b_seed_count.append((b_seed[i] ,bigrams_vocabulary[b_seed[i]] / float(total_freq)))
 
 	
-	if(len(b_seed)==1):
-		w1=b_seed[0][1]
-		sent.append(w1);
-	else:
+		#print 'Seed count with probability values is :',b_seed_count
+		sorted_bseed=sorted(b_seed_count)
+	
+		#print sum(b_seed_count)
+	
+		#sorted_x = sorted(b_seed_count.items(), key=operator.itemgetter(1))
+	
+		#print sorted_bseed
+	
+
+		'''If the number of possible bigrams for the given seed word is just 1 then use that as the seed for the next iteration. No further processing is required '''
+	
+		if(len(b_seed)==1):
+			w1=b_seed[0][1]
+			#print 'w1 is :', w1
+			sent.append(w1);
+		else:
 		
-		rand_no=random.random()
-		cumulative_prob=0
-		print 'Random no generated is :', rand_no
-		for i in range(0, len(b_seed_count)):
+			rand_no=random.random()
+			cumulative_prob=0
+			#print 'Random no generated is :', rand_no
+			for i in range(0, len(sorted_bseed)):
 		
-			upper_limit=cumulative_prob + b_seed_count[sorted_bseed[i]]
-			print 'Upper limit now is :', upper_limit
-			print 'Lower limit is:', cumulative_prob
-			#print 'Corresponding word in array:', sorted_bseed[i]
-			if rand_no > cumulative_prob  and rand_no < cumulative_prob + b_seed_count[sorted_bseed[i]] :
-				w1=sorted_bseed[i][1]
-				break
-			else:	
-				cumulative_prob=cumulative_prob + b_seed_count[sorted_bseed[i]]
+				upper_limit=cumulative_prob + sorted_bseed[i][1]
+				#print 'Upper limit now is :', upper_limit
+				#print 'Lower limit is:', cumulative_prob
+				#print 'Corresponding word in array:', sorted_bseed[i]
+				if rand_no > cumulative_prob  and rand_no < upper_limit :
+					w1=sorted_bseed[i][0][1]
+					break
+				else:	
+					cumulative_prob=cumulative_prob + sorted_bseed[i][1]
 	
-		print 'w1 is :', w1
-		sent.append(w1) ;
+			#print 'w1 is :', w1
+			sent.append(w1) ;
 	 
-	#print 'Sentence at this point is :', sent
+		#print 'Sentence at this point is :', sent
 	 
-	if (w1 =='!' or w1=='.' or w1 =='?' or len(sent)== 41):
-		iteration_counter=0
-		final_sent = ' '.join(sent)
-		final_list.append(final_sent)
-		print 'Sentence at this point in time is :'
-		for i in range(0,len(final_list)):
-			print final_list[i]
-		del sent[:]
-		return final_list;
+		if (w1 =='!' or w1=='.' or w1 =='?' or len(sent)== 41):
+			iteration_counter=0
+			final_sent = ' '.join(sent)
+			final_list.append(final_sent)
+			#sentence_counter=sentence_counter + 1 
+			#print 'Sentence counter is now :', sentence_counter
+			'''for i in range(1,len(final_list)+1):
+				print 'Sentence %d'  %i, final_list[i-1]'''
+			del sent[:]
+			#print type(final_list)
+			#return final_list;
 	 
+		else:
+			iteration_counter=iteration_counter + 1
+			n_gram_language_generator(w1,seed_counter,sentence_counter,iteration_counter)
+	 
+	
 	else:
-		iteration_counter=iteration_counter + 1
-		n_gram_language_generator(w1,iteration_counter)
-	 
-	 			
+		#print 'True'
+		start=seed_counter*10
+		end=start+10
+		i=1
+		for k in range(start,end):
+				print 'Sentence %d :' %i, final_list[k]
+				i=i+1
+		#del final_list[:]	
+		return 1			
 
 
 ####################### Seed Data Processing #########################
 #Variable declaration area
 
 seed_data=[]
-sentence_list=[]
+sent_list=[]
 
 
 #Reading the contents of the seed file   
@@ -322,16 +341,14 @@ for data in seeds:
 	data2=data1.lower().strip()
 	seed_data.append(data2)	
 
-print seed_data
+#print seed_data
 
 for i in range(0, len(seed_data)):
-	print '*********************'
+	print '******************************************'
 	print 'Seed =', seed_data[i]
-	for j in range(0, 10):
-		sent_list = n_gram_language_generator(seed_data[i],0)
-
-
-#for i in range(0, 
-print 'Final result is :', sent_list	
+	print '******************************************'
 	
+	for j in range(0, 11):
+		n_gram_language_generator(seed_data[i],i,j,0)
+
 	
