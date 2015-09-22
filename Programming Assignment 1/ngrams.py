@@ -180,6 +180,7 @@ def smoothed_bigrams_prob(sentence):
 		'''Since V is the vocabulary size which refers to the number of unique terms, this count should not include the '#' which we added for computing the bigram probabilities'''
 		
 		V=len(unigram_vocabulary.keys())
+		#print 'Value of V is :', V
 		a=bigrams_vocabulary[(data_array[i],data_array[i+1])] + 1
 		b=bigrams_unigrams_vocabulary[data_array[i]] + V	
 		
@@ -246,11 +247,7 @@ def n_gram_language_generator(seed_word,seed_counter,sentence_counter,iteration_
 		#print b_seed
 		#print total_freq
 
-		if len(b_seed) < 1:
-			#print 'Sentence at this point is :', sent
-			final_sent = ' '.join(sent)
-			final_list.append(final_sent)
-			return final_list
+		
 
 		# Bigrams and its corresponding probability values stored in a list of tuples where each tuple is of the form (bigram_tuple, probability_value)
 		for i in range(0, len(b_seed)):
@@ -266,10 +263,14 @@ def n_gram_language_generator(seed_word,seed_counter,sentence_counter,iteration_
 	
 		#print sorted_bseed
 	
+		
 
-		'''If the number of possible bigrams for the given seed word is just 1 then use that as the seed for the next iteration. No further processing is required '''
-	
-		if(len(b_seed)==1):
+		'''If no bigrams could be found for the given word, then stop it there. Using the delimiters to mimic the functionality.
+		If the number of possible bigrams for the given seed word is just 1 then use that as the seed for the next iteration. No further processing is required '''
+		if len(b_seed) == 0:			
+			w1='.'
+			a=1
+		elif(len(b_seed)==1):
 			w1=b_seed[0][1]
 			#print 'w1 is :', w1
 			sent.append(w1);
@@ -295,7 +296,7 @@ def n_gram_language_generator(seed_word,seed_counter,sentence_counter,iteration_
 	 
 		#print 'Sentence at this point is :', sent
 	 
-		if (w1 =='!' or w1=='.' or w1 =='?' or len(sent)== 41):
+		if (w1 =='!' or w1=='.' or w1 =='?' or len(sent)== 41 or len(b_seed)==0):
 			iteration_counter=0
 			final_sent = ' '.join(sent)
 			final_list.append(final_sent)
@@ -304,7 +305,7 @@ def n_gram_language_generator(seed_word,seed_counter,sentence_counter,iteration_
 			'''for i in range(1,len(final_list)+1):
 				print 'Sentence %d'  %i, final_list[i-1]'''
 			del sent[:]
-			#print type(final_list)
+			#print final_list
 			#return final_list;
 	 
 		else:
