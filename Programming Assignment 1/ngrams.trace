@@ -1,0 +1,95 @@
+Script started on Mon Sep 21 20:27:30 2015
+[?1034hbash-3.2$ python ngrams.py traiq[Kning.txt test.txt seeds.txt 
+S =  wolf
+Unigrams:logprob(S) =  -10.6569
+Bigrams:logprob(S) =  undefined
+Smoothed Bigrams:logprob(S) = -11.6799
+S =  widespread panic
+Unigrams:logprob(S) =  -26.9286
+Bigrams:logprob(S) =  undefined
+Smoothed Bigrams:logprob(S) = -22.1067
+S =  i don't trust horses . 
+Unigrams:logprob(S) =  -42.7229
+Bigrams:logprob(S) =  -15.1491
+Smoothed Bigrams:logprob(S) = -45.0726
+S =  i swear i am not making this up . 
+Unigrams:logprob(S) =  -74.1429
+Bigrams:logprob(S) =  -28.6793
+Smoothed Bigrams:logprob(S) = -80.6216
+S =  never forget your froggy .
+Unigrams:logprob(S) =  -51.1322
+Bigrams:logprob(S) =  undefined
+Smoothed Bigrams:logprob(S) = -56.3991
+S =  little did i know that a treacherous lizard addressed 300,000 scientists .
+Unigrams:logprob(S) =  -119.3167
+Bigrams:logprob(S) =  undefined
+Smoothed Bigrams:logprob(S) = -133.7532
+******************************************
+Seed = i
+******************************************
+Sentence 1 : i was that , looking directly at the bat to make pointed stones embark on a bargain when i said that ( technically , but first time to meet the fittest .
+Sentence 2 : i don't collect urine ?
+Sentence 3 : i cannot adequately describe it .
+Sentence 4 : i did not the stable and down from the pizza-delivery person and his head and gradually expanding bald spots , with his head into the chance , and watch the russians always jumps right , ) then they should be attached
+Sentence 5 : i also an alarming thought .
+Sentence 6 : i began my office and watch the olympic run .
+Sentence 7 : i going to wait to obtain the gods and -- in my horse bareback , the company's highly trained emergency disaster involving spackle .
+Sentence 8 : i have not making this civilization was crammed uncomfortably inside a candlelight dinner , turkeys , agreed greg , having extremely outgoing person , modern times ( 2 .
+Sentence 9 : i say : green vegetables , strong for a bonus wolf-urine fact , although it was on her agent in the winter olympic team immediately file expense reports .
+Sentence 10 : i don't know named michelle came into the trout .
+******************************************
+Seed = the
+******************************************
+Sentence 1 : the sun , we base this out and , city with this rental horse .
+Sentence 2 : the duck ) , you could not quote : bobsledders on .
+Sentence 3 : the older horses altogether and a controlled substance exuded by the bat to your butt is why not moose off ski jumps holding press are afraid to feed it seems to hold up and skates perkily back of them memorize ,
+Sentence 4 : the schools dropped the u.s. olympic sporting events , helpful , the federal law to have more unfortunate victims like to pay close attention to cling to make pointed this event such as rex .
+Sentence 5 : the hypotenuse , a normal people , only one used to put your hand !
+Sentence 6 : the department is made some wine , which is a higher forms of ecology-nut talk about aging male physique has been there will have not for hours !
+Sentence 7 : the landscape will enforce this up with women are bouncing gaily behind amongst the american news bulletin concerning : steroids can agree that it tasted kind into a lot of unexpected wind up with me hopefully .
+Sentence 8 : the strife-torn today falls down the chorus goes ` sue' on to the u.s. olympic committee , at her notebook inside the donald trump bowl by arrows shot by the run , there are no longer any of the ground so
+Sentence 9 : the times as winter sports illustrated ) the main reason to yourself this rental bobsled run unless we see more rigid .
+Sentence 10 : the same combined total acreage as aerodynamically as pipi de loup .
+******************************************
+Seed = according
+******************************************
+Sentence 1 : according to be attached to the press center and fall down the place over the deer and phyllis schlafly .
+Sentence 2 : according to compete in december , which is : just stay home of us are insects , poland , gives it , at one day tomorrow !
+Sentence 3 : according to mention tonya harding's bodyguard .
+Sentence 4 : according to the seat up watching the federal grant for the bats escaped with her , a 1973 farrah fawcett hair ?
+Sentence 5 : according to keep a-rollin',' adds john tower , meaning i asked sissel how to go off and i'll stand that came up at me , where the opening ceremonies , and watch one on !
+Sentence 6 : according to be bringing you are divided into three consecutive minutes he'll repair the back to our flight from hibernation , who throws bad side of my butt thaws out , moans of these snowbanks , the various types of dropping
+Sentence 7 : according to be unable to his letter i did not going through menopause could fly and tonya harding will gaze on my other news media center and they won't let us do you be happier outdoors .
+Sentence 8 : according to the ground you with about once the government , and grunt like the sphincter .
+Sentence 9 : according to go by sculpting a definition that .
+Sentence 10 : according to discuss this article in life , that this law of a nationwide research .
+******************************************
+Seed = animals
+******************************************
+Sentence 1 : animals that your brain shrieks : i occupied during a box of life is what i suggested to oslo , i have said : they had our calculations , hopes for all over the '90s , this .
+Sentence 2 : animals , the greek , the retro thruster modules , they are not consider going through phases and there is going to build his head bouncing next time .
+Sentence 3 : animals without the supreme being born and threatening to ... and died .
+Sentence 4 : animals are some !
+Sentence 5 : animals , the lookout for me .
+Sentence 6 : animals that all of the men's 10 kilometer alpine uphill , inasmuch as a successful career as the beverage-cart service .
+Sentence 7 : animals without the right now , city with a practice a lot of astonishing equestrian skill , faster than nancy and you walk on the other day , faster than at the team and peeing in the survival of the hero
+Sentence 8 : animals that .
+Sentence 9 : animals .
+Sentence 10 : animals .
+******************************************
+Seed = zsa
+******************************************
+Sentence 1 : zsa gabor is blasting , comes to make pointed this condition is not a week he would say that due to conclude that are required by which is not real song stuck in one of roles , it .
+Sentence 2 : zsa zsa zsa zsa zsa zsa zsa gabor is written on the free-tailed bat to win this statement on the place setting .
+Sentence 3 : zsa gabor is hailed as tahiti , that your brain plays it will get to fix her tax-evasion trial comes now , other news media are not making any time i put my little pastel-colored critter with trout .
+Sentence 4 : zsa gabor is a horse .
+Sentence 5 : zsa zsa zsa gabor is a memo : just stay home on some wine , we're going to a darned good thing yourself , actually get hold their foreheads .
+Sentence 6 : zsa gabor is the top journalists are waiting .
+Sentence 7 : zsa zsa gabor is translated -- even with slices of 80 miles per hour .
+Sentence 8 : zsa zsa gabor is an aging male with one highlight , wherein we took off and in an alarming thought .
+Sentence 9 : zsa zsa zsa zsa gabor is why not the cow doots .
+Sentence 10 : zsa zsa gabor is named lytle s. surgeon named ole gunnar fidjestol ( which is what happened to get hold of the press elevator buttons with no .
+bash-3.2$ exit
+exit
+
+Script done on Mon Sep 21 20:27:55 2015
