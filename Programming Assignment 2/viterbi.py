@@ -33,7 +33,7 @@ with open(probabilities_file, 'r') as inputFile:
 for i in range(0, len(prob_data)):
 	prob_data_list.append(prob_data[i].replace('\n','').split(" "))
 	
-print 'Probabilities values are :', prob_data_list
+#print 'Probabilities values are :', prob_data_list
 
 
 # Storing the values from the probabilities file as a dictionary of key,value pairs where key is POS bigram /lexical generation pairs
@@ -43,7 +43,7 @@ for i in range(0, len(prob_data_list)):
 	value=float(prob_data_list[i][2])
 	prob_dict[key]=value
 
-print 'The prob dict values are :', prob_dict	
+#print 'The prob dict values are :', prob_dict	
 	
 
 
@@ -56,12 +56,13 @@ def viterbi(sent, W, T):
 	#print 'Score is :', score
 	#print 'No of tags is :', T
 	
-	############   Initialization step   ################
+	print '\nFINAL VITERBI NETWORK'
+	###############   Initialization step   ###################
 	for t in range(0, T):
 		word1_tagt=(sent[0],pos_tags[t])
-		print 'Word1 | tag_t is :', word1_tagt
+		#print 'Word1 | tag_t is :', word1_tagt
 		tagt_phi=(pos_tags[t],'phi')
-		print 'Tag_t | phi is :', tagt_phi
+		#print 'Tag_t | phi is :', tagt_phi
 		
 		# Four possible cases handled below
 		
@@ -79,6 +80,39 @@ def viterbi(sent, W, T):
 		print 'P(' + sent[0] + '=' + pos_tags[t] +') = %.10f' %score[t][0]
 
 
+	##################### Iteration step #####################
+
+	max_value_candidates=[]
+	for w in range(1, len(sent)):
+		for t in range(0, T):
+			wordw_tagt=(sent[w],pos_tags[t])   #wordw | tagt
+			
+			''' Implementing MAXj=1,T (Score(j, w-1) * Pr(Tagt | Tagj))'''
+			for j in range(0,T):
+				
+				tagt_tagj=(pos_tags[t],pos_tags[j])
+				if tagt_tagj in prob_dict:
+		
+					value= score[j][w-1] * prob_dict[tagt_tagj]
+				else:
+					value=	score[j][w-1] * 0.0001    #If the bigram is not there, use the default value
+			
+				max_value_candidates.append(value)	
+			#Finding the max value from the list	
+			max_value=max(max_value_candidates)  
+			
+			#print 'Max value is : %.10f' %max_value	
+			
+			max_value_candidates=[]   #Making the list empty so that the next iteration produces the correct values
+			
+			if wordw_tagt in prob_dict:
+				
+				score[t][w]=prob_dict[wordw_tagt] * max_value
+			else:
+				
+				score[t][w]=0.0001 * max_value
+		
+			print 'P(' + sent[w] + '=' + pos_tags[t] +') = %.10f' %score[t][w]		
 ############################# SENTENCE FILE PROCESSING #################################
 
 # Reading the contents of the sentences file
@@ -102,5 +136,5 @@ for i in range(0, len(sent_data)):
 for i in range(0, len(words_sent)):
 	print 'PROCESSING SENTENCE:', ' '.join(words_sent[i])
 	W=len(words_sent[i])
-	print 'No of words in the sentence is :', W
+	#print 'No of words in the sentence is :', W
 	viterbi(words_sent[i],W,T)
