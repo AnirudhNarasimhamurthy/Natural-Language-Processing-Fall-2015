@@ -139,8 +139,32 @@ def viterbi(sent, W, T):
 			
 ######################## SEQUENCE IDENTIFICATION #####################################
 
-			
-				
+	seq=[0] * W
+	#print 'Seq init is :',seq
+	max_t=0
+	pos=0
+	# Finding the position of the element which maximizes the score
+	for w in range(W-1, W):
+		for t in range(0, T):
+			#print 'score[t][w] is: %.10f' %score[t][w]
+			if score[t][w] > max_t:
+				max_t=score[t][w]
+				#print 'Max t is :', max_t
+				pos=t
+			#print 'pos is :', pos
+		seq[W-1]=pos	
+	
+	
+	#print 'Sequence is :', seq
+	print'\nBEST TAG SEQUENCE HAS PROBABILITY =%.10f' %max_t	
+		
+	for w in range(W-2,-1,-1):
+		#print 'w is :', w
+		seq[w]=backptr[seq[w+1]][w+1]
+	
+	#Final printing of results
+	for w in range(W-1, -1,-1):
+		print sent[w] + '->' + pos_tags[seq[w]] 					
 ############################# SENTENCE FILE PROCESSING #################################
 
 # Reading the contents of the sentences file
@@ -151,7 +175,7 @@ with open(sentences_file, 'r') as inputFile:
 for i in range(0, len(sent_data)):
 	sent_data[i]=sent_data[i].replace('\n', '').lower()
 	
-print 'Sentences values are :', sent_data
+#print 'Sentences values are :', sent_data
 
 
 # Storing the words in each sentence in a list of lists
