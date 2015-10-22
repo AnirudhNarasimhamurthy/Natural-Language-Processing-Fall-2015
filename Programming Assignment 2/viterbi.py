@@ -53,6 +53,7 @@ for i in range(0, len(prob_data_list)):
 def viterbi(sent, W, T):
 
 	score=[[0 for x in range(W)]  for i in range(T)]
+	backptr=[[0 for x in range(W)]  for i in range(T)]
 	#print 'Score is :', score
 	#print 'No of tags is :', T
 	
@@ -76,6 +77,10 @@ def viterbi(sent, W, T):
 				score[t][0]= 0.0001 * prob_dict[tagt_phi]	#word1_tagt is not in dict
 			else:
 				score[t][0]= 0.0001 * 0.0001	            # both are not in dict
+				
+		# Updating the backptr network
+		
+		backptr[t][0]=0		
 
 		print 'P(' + sent[0] + '=' + pos_tags[t] +') = %.10f' %score[t][0]
 
@@ -83,11 +88,12 @@ def viterbi(sent, W, T):
 	##################### Iteration step #####################
 
 	max_value_candidates=[]
+	pos=0
 	for w in range(1, len(sent)):
 		for t in range(0, T):
 			wordw_tagt=(sent[w],pos_tags[t])   #wordw | tagt
 			
-			''' Implementing MAXj=1,T (Score(j, w-1) * Pr(Tagt | Tagj))'''
+			# Implementing MAXj=1,T (Score(j, w-1) * Pr(Tagt | Tagj)) #
 			for j in range(0,T):
 				
 				tagt_tagj=(pos_tags[t],pos_tags[j])
@@ -98,12 +104,21 @@ def viterbi(sent, W, T):
 					value=	score[j][w-1] * 0.0001    #If the bigram is not there, use the default value
 			
 				max_value_candidates.append(value)	
-			#Finding the max value from the list	
-			max_value=max(max_value_candidates)  
 			
-			#print 'Max value is : %.10f' %max_value	
+			#Finding the max value from the list
+			max_value=0;
+		
+			for i in range(0, len(max_value_candidates)):
+				if(max_value_candidates[i] > max_value):
+					max_value=max_value_candidates[i]
+					pos=i
+					
+			#print 'Postion is :', pos
 			
-			max_value_candidates=[]   #Making the list empty so that the next iteration produces the correct values
+			#max_value=max(max_value_candidates)  
+			
+			
+			max_value_candidates=[]   
 			
 			if wordw_tagt in prob_dict:
 				
@@ -111,8 +126,21 @@ def viterbi(sent, W, T):
 			else:
 				
 				score[t][w]=0.0001 * max_value
+				
+			backptr[t][w]=pos	
 		
-			print 'P(' + sent[w] + '=' + pos_tags[t] +') = %.10f' %score[t][w]		
+			print 'P(' + sent[w] + '=' + pos_tags[t] +') = %.10f' %score[t][w]	
+	
+	print '\nFINAL BACKPTR NETWORK'
+	for w in range(1, len(sent)):
+		for t in range(0, T):		
+			print 'Backptr(' + sent[w] +'=' +pos_tags[t] +')=', pos_tags[backptr[t][w]]	
+			
+			
+######################## SEQUENCE IDENTIFICATION #####################################
+
+			
+				
 ############################# SENTENCE FILE PROCESSING #################################
 
 # Reading the contents of the sentences file
