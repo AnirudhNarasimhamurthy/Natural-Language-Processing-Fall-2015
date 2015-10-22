@@ -93,40 +93,31 @@ def viterbi(sent, W, T):
 		for t in range(0, T):
 			wordw_tagt=(sent[w],pos_tags[t])   #wordw | tagt
 			
-			# Implementing MAXj=1,T (Score(j, w-1) * Pr(Tagt | Tagj)) #
+			# Implementing MAXj=1,T (Score(j, w-1) * Pr(Tagt | Tagj)) 
+			
 			for j in range(0,T):
-				
 				tagt_tagj=(pos_tags[t],pos_tags[j])
 				if tagt_tagj in prob_dict:
 		
 					value= score[j][w-1] * prob_dict[tagt_tagj]
 				else:
 					value=	score[j][w-1] * 0.0001    #If the bigram is not there, use the default value
-			
 				max_value_candidates.append(value)	
 			
 			#Finding the max value from the list
+			
 			max_value=0;
-		
 			for i in range(0, len(max_value_candidates)):
 				if(max_value_candidates[i] > max_value):
 					max_value=max_value_candidates[i]
 					pos=i
 					
-			#print 'Postion is :', pos
-			
-			#max_value=max(max_value_candidates)  
-			
-			
 			max_value_candidates=[]   
 			
-			if wordw_tagt in prob_dict:
-				
+			if wordw_tagt in prob_dict:	
 				score[t][w]=prob_dict[wordw_tagt] * max_value
 			else:
-				
 				score[t][w]=0.0001 * max_value
-				
 			backptr[t][w]=pos	
 		
 			print 'P(' + sent[w] + '=' + pos_tags[t] +') = %.10f' %score[t][w]	
@@ -134,7 +125,7 @@ def viterbi(sent, W, T):
 	print '\nFINAL BACKPTR NETWORK'
 	for w in range(1, len(sent)):
 		for t in range(0, T):		
-			print 'Backptr(' + sent[w] +'=' +pos_tags[t] +')=', pos_tags[backptr[t][w]]	
+			print 'Backptr(' + sent[w] +'=' +pos_tags[t] +') =', pos_tags[backptr[t][w]]	
 			
 			
 ######################## SEQUENCE IDENTIFICATION #####################################
@@ -143,28 +134,106 @@ def viterbi(sent, W, T):
 	#print 'Seq init is :',seq
 	max_t=0
 	pos=0
-	# Finding the position of the element which maximizes the score
+	# Seq(W) = t that maximizes Score(t,W)
+	
 	for w in range(W-1, W):
 		for t in range(0, T):
-			#print 'score[t][w] is: %.10f' %score[t][w]
 			if score[t][w] > max_t:
 				max_t=score[t][w]
-				#print 'Max t is :', max_t
 				pos=t
-			#print 'pos is :', pos
 		seq[W-1]=pos	
 	
+	print'\nBEST TAG SEQUENCE HAS PROBABILITY = %.10f' %max_t	
 	
-	#print 'Sequence is :', seq
-	print'\nBEST TAG SEQUENCE HAS PROBABILITY =%.10f' %max_t	
+	# Seq(w) = BackPtr(Seq(w+1),w+1)
 		
 	for w in range(W-2,-1,-1):
-		#print 'w is :', w
 		seq[w]=backptr[seq[w+1]][w+1]
 	
 	#Final printing of results
+	
 	for w in range(W-1, -1,-1):
-		print sent[w] + '->' + pos_tags[seq[w]] 					
+		print sent[w] + ' -> ' + pos_tags[seq[w]] 					
+
+
+############################ FORWARD ALGORITHM ################################
+
+
+def forward_algorithm(sent, W, T):
+
+	seq_sum=[[0 for x in range(W)]  for i in range(T)]
+	#backptr=[[0 for x in range(W)]  for i in range(T)]
+	#print 'Score is :', score
+	#print 'No of tags is :', T
+	
+	print '\nFORWARD ALGORITHM RESULTS'
+	###############   Initialization step   ###################
+	for t in range(0, T):
+		word1_tagt=(sent[0],pos_tags[t])
+		#print 'Word1 | tag_t is :', word1_tagt
+		tagt_phi=(pos_tags[t],'phi')
+		#print 'Tag_t | phi is :', tagt_phi
+		
+		# Four possible cases handled below
+		
+		if word1_tagt in prob_dict:
+			if tagt_phi in prob_dict:
+				seq_sum[t][0]=prob_dict[word1_tagt] * prob_dict[tagt_phi] #Both are in dict
+			else:
+				seq_sum[t][0]=prob_dict[word1_tagt] * 0.001   #tagt_phi is not in dict
+		else:
+			if tagt_phi in prob_dict:
+				seq_sum[t][0]= 0.0001 * prob_dict[tagt_phi]	#word1_tagt is not in dict
+			else:
+				seq_sum[t][0]= 0.0001 * 0.0001	            # both are not in dict
+				
+		
+		#print 'P(' + sent[0] + '=' + pos_tags[t] +') = %.10f' %score[t][0]
+
+
+########################### Compute Forward Probs ###########################
+
+	value=0
+	pos=0
+	for w in range(1, W):
+		for t in range(0, T):
+			wordw_tagt=(sent[w],pos_tags[t])   #wordw | tagt
+			
+			''' Computing the sum of values and populating seq_sum '''
+			for j in range(0,T):
+				tagt_tagj=(pos_tags[t],pos_tags[j])
+				if tagt_tagj in prob_dict:
+		
+					value= value+ seq_sum[j][w-1] * prob_dict[tagt_tagj]
+				else:
+					value= value+seq_sum[j][w-1] * 0.0001    #If the bigram is not there, use the default value
+				   
+			
+			if wordw_tagt in prob_dict:	
+				seq_sum[t][w]=prob_dict[wordw_tagt] * value
+			else:
+				seq_sum[t][w]=0.0001 * value	
+			
+			value=0
+			#print 'P(' + sent[w] + '=' + pos_tags[t] +') = %.10f' %seq_sum[t][w]	
+	
+	
+	
+			
+######################## Compute Lexical Probs #####################################
+
+	denom=0
+			
+	for w in range(0,W):
+		for t in range(0, T):	
+			for j in range(0,T):
+				denom=denom +seq_sum[j][w]	
+			value=seq_sum[t][w] / float(denom)
+			print 'P('+ sent[w] + '=' + pos_tags[t] + ') = %.10f' %value
+			denom=0
+
+	print '\n'
+
 ############################# SENTENCE FILE PROCESSING #################################
 
 # Reading the contents of the sentences file
@@ -190,3 +259,4 @@ for i in range(0, len(words_sent)):
 	W=len(words_sent[i])
 	#print 'No of words in the sentence is :', W
 	viterbi(words_sent[i],W,T)
+	forward_algorithm(words_sent[i],W,T)
