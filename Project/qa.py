@@ -59,3 +59,15 @@ for i in range(1, len(data)):
 
     print 'QuestionID List is :', qIDList
     print 'Question list is :', qList
+
+    ####################### Building the response file #############################################
+
+    with open ("AnswerResponse","a") as f:
+	    for i in range(0, len(qIDList)):
+                f.write(qIDList[i])
+                f.write("\n")
+                f.write("Answer:")
+                f.write("\n\n")
+
+
+
