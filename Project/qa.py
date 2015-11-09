@@ -2,7 +2,10 @@ __author__ = 'Anirudh'
 
 
 import sys
+import nltk
+from nltk.corpus import stopwords
 import QP
+import WM
 
 
 ################ Getting the input file from the command line arguments ###########################
@@ -60,7 +63,27 @@ for i in range(1, len(data)):
         del story[deleted_index[i]]'''
 
     #print 'Story is :', story
-    QP.story_parser(story)
+    sentences_list=QP.story_parser(story)
+
+
+    # Removing the stop words from  each sentence using NLTK's stopwords and then creating a final sentence list
+    # where each sentence is free of stop words
+    stops = set(stopwords.words('english'))
+
+    print 'Number of stop words in NLTK library is :',len(stops)
+
+    non_stop_words=[]
+    stopwords_free_sentences_list=[]
+    for sent in sentences_list:
+        for w in sent.split():
+            if w.lower() not in stops:
+                non_stop_words.append(w)
+        temp=' '.join(non_stop_words)
+        stopwords_free_sentences_list.append(temp)
+        non_stop_words=[]
+
+    #print 'After stop words removal the sentences list is:', stopwords_free_sentences_list
+    #print len(stopwords_free_sentences_list)
 
     ################## Reading the corresponding question file for the given story id ###################
     with open(question_path, 'r') as questionFile:
@@ -71,10 +94,38 @@ for i in range(1, len(data)):
 
     #print 'Question is :', question
 
-    qIDList, qList = QP.question_parser(question)
+    qIDList, qList,cleansedqList = QP.question_parser(question)
 
-    print 'QuestionID List is :', qIDList
-    print 'Question list is :', qList
+    #print 'QuestionID List is :', qIDList
+    #print 'Question list is :', qList
+    #print 'Cleansed question list is :',cleansedqList
+
+
+    #print len(qList)
+
+    # Removing the stop words from  each question using NLTK's stopwords and then creating a final question list
+    # where each question is free of stop words  --- Actually need not do this for the questions
+
+    response_sent_candidates=[]
+
+    #Calling WordMatch function to compute the number of words that appear in both question and sentence being considered
+    for i in range(0, len(cleansedqList)):
+        for j in range(0, len(stopwords_free_sentences_list)):
+            result_count = WM.wordMatch(cleansedqList[i],stopwords_free_sentences_list[j])
+            if result_count > 0:
+                response_sent_candidates.append(stopwords_free_sentences_list[j])
+        print 'Question is :', cleansedqList[i]
+        print 'Candidate responses are:',response_sent_candidates
+        response_sent_candidates=[]
+
+
+
+
+
+
+
+
+
 
     ####################### Building the response file #############################################
 
