@@ -26,7 +26,7 @@ print 'Data is :', data
 directory_path=data[0]
 print 'Directory path is :', directory_path
 
-#######################  Computing the full directory path for story and question from storyID #######################
+#######################  Computing the full directory path from the storyID for story and question  #######################
 
 for i in range(1, len(data)):
     story_id=data[i]
