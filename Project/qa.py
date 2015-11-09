@@ -85,6 +85,8 @@ for i in range(1, len(data)):
     #print 'After stop words removal the sentences list is:', stopwords_free_sentences_list
     #print len(stopwords_free_sentences_list)
 
+
+
     ################## Reading the corresponding question file for the given story id ###################
     with open(question_path, 'r') as questionFile:
         question=questionFile.readlines()
@@ -103,8 +105,43 @@ for i in range(1, len(data)):
 
     #print len(qList)
 
-    # Removing the stop words from  each question using NLTK's stopwords and then creating a final question list
-    # where each question is free of stop words  --- Actually need not do this for the questions
+
+    ################### CATEGORIZING THE QUESTION AS WH0, WHAT, WHEN , WHY , WHERE OR HOW  ########################
+
+    who_list,what_list,when_list,why_list,where_list,how_list=[],[],[],[],[],[]
+
+
+    for i in range(0, len(cleansedqList)):
+        qWords= cleansedqList[i].split()
+        for j in range(0, len(qWords)):
+            if qWords[j].lower()=='who':
+                who_list.append(cleansedqList[i])
+                break
+            elif qWords[j].lower()=='what':
+                what_list.append(cleansedqList[i])
+                break
+            elif qWords[j].lower()=='when':
+                when_list.append(cleansedqList[i])
+                break
+            elif qWords[j].lower()=='where':
+                where_list.append(cleansedqList[i])
+                break
+            elif qWords[j].lower()=='why':
+                why_list.append(cleansedqList[i])
+                break
+            elif qWords[j].lower()=='how':
+                how_list.append(cleansedqList[i])
+                break
+
+    print 'Questions belonging to who list:', who_list
+    print 'Questions belonging to what list:', what_list
+    print 'Questions belonging to when list:', when_list
+    print 'Questions belonging to where list:', where_list
+    print 'Questions belonging to why_list:', why_list
+    print 'Questions belonging to how list:', how_list
+
+
+    # Passing the required parameters for the WordMatch function
 
     response_sent_candidates=[]
 
@@ -114,14 +151,26 @@ for i in range(1, len(data)):
             result_count = WM.wordMatch(cleansedqList[i],stopwords_free_sentences_list[j])
             if result_count > 0:
                 response_sent_candidates.append(stopwords_free_sentences_list[j])
-        print 'Question is :', cleansedqList[i]
-        print 'Candidate responses are:',response_sent_candidates
+        #print 'Question is :', cleansedqList[i]
+        #print 'Candidate responses are:',response_sent_candidates
         response_sent_candidates=[]
 
 
+    # Tokenizing the given input sentences
 
+    for i in range(0, len(stopwords_free_sentences_list)):
+        tokens = nltk.word_tokenize(stopwords_free_sentences_list[i])
+        tagged = nltk.pos_tag(tokens)
+        entities = nltk.chunk.ne_chunk(tagged)
+        #print 'Entities in sentences are :', entities
 
+    # Tokenizing the given questions
 
+    for i in range(0, len(cleansedqList)):
+        tokens = nltk.word_tokenize(cleansedqList[i])
+        tagged = nltk.pos_tag(tokens)
+        entities = nltk.chunk.ne_chunk(tagged)
+        #print 'Entities in question are :', entities
 
 
 
