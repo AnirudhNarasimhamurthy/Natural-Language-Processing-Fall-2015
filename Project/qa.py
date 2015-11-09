@@ -46,6 +46,22 @@ for i in range(1, len(data)):
 
     #print 'Story is :', story
 
+    deleted_index=[]
+    for i in range(6,len(story)):
+        if story[i]=='':
+            #print 'story[i] is:',story[i]
+            deleted_index.append(i)
+
+    #print 'Deleted indexes is :', deleted_index
+
+    '''for i in range(0, len(deleted_index)):
+        print 'Element to be deleted is :', story[deleted_index[i]]
+        print deleted_index[i],i
+        del story[deleted_index[i]]'''
+
+    #print 'Story is :', story
+    QP.story_parser(story)
+
     ################## Reading the corresponding question file for the given story id ###################
     with open(question_path, 'r') as questionFile:
         question=questionFile.readlines()
