@@ -4,8 +4,10 @@ __author__ = 'Anirudh'
 import sys
 import nltk
 from nltk.corpus import stopwords
+from nltk.tag.stanford import NERTagger
 import QP
 import WM
+import NET
 
 
 ################ Getting the input file from the command line arguments ###########################
@@ -40,37 +42,24 @@ for i in range(1, len(data)):
     #print 'Question file is :', question_path
     #print 'Story file is :', story_path
 
-    ################## Reading the corresponding story file for the given story id ###################
+    ##################   Reading the corresponding story file for the given story id ###################
+
     with open(story_path, 'r') as storyFile:
         story=storyFile.readlines()
 
     for i in range(0,len(story)):
         story[i]=story[i].replace("\n","")
 
-    #print 'Story is :', story
-
-    deleted_index=[]
-    for i in range(6,len(story)):
-        if story[i]=='':
-            #print 'story[i] is:',story[i]
-            deleted_index.append(i)
-
-    #print 'Deleted indexes is :', deleted_index
-
-    '''for i in range(0, len(deleted_index)):
-        print 'Element to be deleted is :', story[deleted_index[i]]
-        print deleted_index[i],i
-        del story[deleted_index[i]]'''
 
     #print 'Story is :', story
     sentences_list=QP.story_parser(story)
 
 
-    # Removing the stop words from  each sentence using NLTK's stopwords and then creating a final sentence list
-    # where each sentence is free of stop words
+    #### Removing the stop words from  each sentence using NLTK's stopwords and then creating a final stop word free sentence list ###
+
     stops = set(stopwords.words('english'))
 
-    print 'Number of stop words in NLTK library is :',len(stops)
+    #print 'Number of stop words in NLTK library is :',len(stops)
 
     non_stop_words=[]
     stopwords_free_sentences_list=[]
@@ -88,6 +77,7 @@ for i in range(1, len(data)):
 
 
     ################## Reading the corresponding question file for the given story id ###################
+
     with open(question_path, 'r') as questionFile:
         question=questionFile.readlines()
 
@@ -101,8 +91,6 @@ for i in range(1, len(data)):
     #print 'QuestionID List is :', qIDList
     #print 'Question list is :', qList
     #print 'Cleansed question list is :',cleansedqList
-
-
     #print len(qList)
 
 
@@ -156,24 +144,37 @@ for i in range(1, len(data)):
         response_sent_candidates=[]
 
 
-    # Tokenizing the given input sentences
+    ####### Named  Entity tagging using Stanford NER system for PERSON, ORGANIZATION and LOCATION entities #############
+    '''NER_list=[]
+
+    st = NERTagger('/Users/Anirudh/Desktop/Fall 2015/NLP/Natural-Language-Processing-Fall-2015/Project/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz',
+                   '/Users/Anirudh/Desktop/Fall 2015/NLP/Natural-Language-Processing-Fall-2015/Project/stanford-ner-2014-06-16/stanford-ner.jar')
+
 
     for i in range(0, len(stopwords_free_sentences_list)):
-        tokens = nltk.word_tokenize(stopwords_free_sentences_list[i])
-        tagged = nltk.pos_tag(tokens)
-        entities = nltk.chunk.ne_chunk(tagged)
-        #print 'Entities in sentences are :', entities
+        NER_list.append(st.tag(stopwords_free_sentences_list[i].split()))
+
+    print 'NER List:', NER_list
+
+    for i in range(0, len(sentences_list)):
+        NER_list.append(st.tag(sentences_list[i].split()))'''
+
+    #print 'NER List:', NER_list
+
+
+    # Named Entity tagging for the given input sentences
+
+    person_list, org_list, loc_list = NET.named_entity_tagging(sentences_list)
+
 
     # Tokenizing the given questions
 
-    for i in range(0, len(cleansedqList)):
-        tokens = nltk.word_tokenize(cleansedqList[i])
-        tagged = nltk.pos_tag(tokens)
-        entities = nltk.chunk.ne_chunk(tagged)
-        #print 'Entities in question are :', entities
+    q_person_list, q_org_list, q_loc_list = NET.named_entity_tagging(cleansedqList)
+
+        #print 'Entities in question are :', entities'''
 
 
-
+    ##################### HANDLING WHERE QUESTIONS ################
 
 
     ####################### Building the response file #############################################
