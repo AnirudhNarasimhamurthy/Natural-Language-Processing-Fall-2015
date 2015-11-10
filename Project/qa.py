@@ -52,7 +52,7 @@ for i in range(1, len(data)):
 
 
     #print 'Story is :', story
-    sentences_list=QP.story_parser(story)
+    sentences_list,hline_date=QP.story_parser(story)
 
 
     #### Removing the stop words from  each sentence using NLTK's stopwords and then creating a final stop word free sentence list ###
@@ -97,13 +97,15 @@ for i in range(1, len(data)):
     ################### CATEGORIZING THE QUESTION AS WH0, WHAT, WHEN , WHY , WHERE OR HOW  ########################
 
     who_list,what_list,when_list,why_list,where_list,how_list=[],[],[],[],[],[]
-
+    answer_list=[]
 
     for i in range(0, len(cleansedqList)):
         qWords= cleansedqList[i].split()
         for j in range(0, len(qWords)):
             if qWords[j].lower()=='who':
+                result = answering_who(qList,cleansedqList[i],stopwords_free_sentences_list)
                 who_list.append(cleansedqList[i])
+                answer_list.append(result)
                 break
             elif qWords[j].lower()=='what':
                 what_list.append(cleansedqList[i])
@@ -127,6 +129,12 @@ for i in range(1, len(data)):
     print 'Questions belonging to where list:', where_list
     print 'Questions belonging to why_list:', why_list
     print 'Questions belonging to how list:', how_list
+
+
+    ##################### HANDLING WHO QUESTIONS #################################
+
+
+
 
 
     # Passing the required parameters for the WordMatch function
@@ -174,7 +182,6 @@ for i in range(1, len(data)):
         #print 'Entities in question are :', entities'''
 
 
-    ##################### HANDLING WHERE QUESTIONS ################
 
 
     ####################### Building the response file #############################################
