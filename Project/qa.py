@@ -8,6 +8,8 @@ from nltk.tag.stanford import NERTagger
 import QP
 import WM
 import NET
+import who
+from time import gmtime, strftime
 
 
 ################ Getting the input file from the command line arguments ###########################
@@ -94,6 +96,22 @@ for i in range(1, len(data)):
     #print len(qList)
 
 
+
+    ################## Removing the stopwords from each question using NLTK's stopwords list ###################
+
+    non_stop_words=[]
+    stopwords_free_questions_list=[]
+    for sent in qList:
+        for w in sent.split():
+            if w.lower() not in stops:
+                non_stop_words.append(w)
+        temp=' '.join(non_stop_words)
+        stopwords_free_questions_list.append(temp)
+        non_stop_words=[]
+
+
+
+
     ################### CATEGORIZING THE QUESTION AS WH0, WHAT, WHEN , WHY , WHERE OR HOW  ########################
 
     who_list,what_list,when_list,why_list,where_list,how_list=[],[],[],[],[],[]
@@ -101,11 +119,13 @@ for i in range(1, len(data)):
 
     for i in range(0, len(cleansedqList)):
         qWords= cleansedqList[i].split()
+        #print 'Question is :',cleansedqList[i]
         for j in range(0, len(qWords)):
             if qWords[j].lower()=='who':
-                result = answering_who(qList,cleansedqList[i],stopwords_free_sentences_list)
-                who_list.append(cleansedqList[i])
-                answer_list.append(result)
+                #print 'Who question',cleansedqList[i]
+                answer_list.append(who.answering_who(qList[i],cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list)) #stopwords_free_sentences_list
+                #who_list.append(cleansedqList[i])
+                #answer_list.append(result)
                 break
             elif qWords[j].lower()=='what':
                 what_list.append(cleansedqList[i])
@@ -123,12 +143,12 @@ for i in range(1, len(data)):
                 how_list.append(cleansedqList[i])
                 break
 
-    print 'Questions belonging to who list:', who_list
+    '''print 'Questions belonging to who list:', who_list
     print 'Questions belonging to what list:', what_list
     print 'Questions belonging to when list:', when_list
     print 'Questions belonging to where list:', where_list
     print 'Questions belonging to why_list:', why_list
-    print 'Questions belonging to how list:', how_list
+    print 'Questions belonging to how list:', how_list'''
 
 
     ##################### HANDLING WHO QUESTIONS #################################
@@ -142,42 +162,46 @@ for i in range(1, len(data)):
     response_sent_candidates=[]
 
     #Calling WordMatch function to compute the number of words that appear in both question and sentence being considered
-    for i in range(0, len(cleansedqList)):
+    '''for i in range(0, len(cleansedqList)):
         for j in range(0, len(stopwords_free_sentences_list)):
             result_count = WM.wordMatch(cleansedqList[i],stopwords_free_sentences_list[j])
             if result_count > 0:
                 response_sent_candidates.append(stopwords_free_sentences_list[j])
         #print 'Question is :', cleansedqList[i]
         #print 'Candidate responses are:',response_sent_candidates
-        response_sent_candidates=[]
+        response_sent_candidates=[]'''
 
 
     ####### Named  Entity tagging using Stanford NER system for PERSON, ORGANIZATION and LOCATION entities #############
-    '''NER_list=[]
+    NER_list=[]
 
     st = NERTagger('/Users/Anirudh/Desktop/Fall 2015/NLP/Natural-Language-Processing-Fall-2015/Project/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz',
                    '/Users/Anirudh/Desktop/Fall 2015/NLP/Natural-Language-Processing-Fall-2015/Project/stanford-ner-2014-06-16/stanford-ner.jar')
 
 
-    for i in range(0, len(stopwords_free_sentences_list)):
+    '''for i in range(0, len(stopwords_free_sentences_list)):
         NER_list.append(st.tag(stopwords_free_sentences_list[i].split()))
 
-    print 'NER List:', NER_list
+    print 'NER List:', NER_list'''
+
+    '''print 'Start time:', strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
     for i in range(0, len(sentences_list)):
-        NER_list.append(st.tag(sentences_list[i].split()))'''
+        NER_list.append(st.tag(sentences_list[i].split()))
+
+    print 'End time:',strftime("%Y-%m-%d %H:%M:%S", gmtime())'''
 
     #print 'NER List:', NER_list
 
 
     # Named Entity tagging for the given input sentences
 
-    person_list, org_list, loc_list = NET.named_entity_tagging(sentences_list)
+    #person_list, org_list, loc_list = NET.named_entity_tagging(sentences_list)
 
 
     # Tokenizing the given questions
 
-    q_person_list, q_org_list, q_loc_list = NET.named_entity_tagging(cleansedqList)
+    #q_person_list, q_org_list, q_loc_list = NET.named_entity_tagging(cleansedqList)
 
         #print 'Entities in question are :', entities'''
 
@@ -190,7 +214,8 @@ for i in range(1, len(data)):
 	    for i in range(0, len(qIDList)):
                 f.write(qIDList[i])
                 f.write("\n")
-                f.write("Answer:")
+                f.write("Answer: ")
+                #f.write(answer_list[i])
                 f.write("\n\n")
 
 
