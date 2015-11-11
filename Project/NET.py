@@ -33,130 +33,171 @@ def named_entity_tagging(stopwords_free_sentences_list):
 
 
 
+    ################## PROFESSION ENTITY LIST #####################
+
+    profession=['principal', 'doctor', 'nurse','husband','wife','accountant','administrative services department manager','manager','agricultural advisor','air-conditioning installer','mechanic',
+'aircraft service technician','ambulance driver','animal carer','arable farm manager','arable farmer','architect',
+'asbestos removal worker','assembler','assembly team leader','team leader','bank clerk','clerk','beauty therapist',
+'beverage production process controller','boring machine operator','bricklayer','butcher','car mechanic','carpenter','charge nurse',
+'check-out operator','child care services manager','baby care taker','child-carer','civil engineering technician','cleaning supervisor',
+'climatologist','cloak room attendant','cnc operator','community health worker','company director','confectionery maker',
+'construction operative','cooling or freezing installer','database designer','dental hygienist','dentist','dental prosthesis technician',
+'department store manager','dietician','display designer','domestic housekeeper','education advisor','electrical engineer',
+'electrical mechanic or fitter','engineering maintenance supervisor','estate agent','executive secretary','felt roofer','filing clerk',
+'financial clerk','financial services manager','fire fighter','first line supervisor beverages workers',
+'first line supervisor of cleaning workers','flight attendant','floral arranger','food scientist','garage supervisor','gardener',
+'general practitioner','hairdresser','head groundsman','horse riding instructor','hospital nurse','hotel manager','house painter',
+'hr manager','it applications programmer','it systems administrator','journalist','judge','kitchen assistant','lathe setter-operator',
+'lawyer','legal secretary','local police officer','logistics manager','machine tool operator','health services manager',
+'meat processing operator','mechanical engineering technician','medical laboratory technician','medical radiography equipment operator',
+'metal moulder','metal production process operator','meteorologist','midwifery professional','mortgage clerk','musical instrument maker',
+'non-commissioned officer armed forces','nursery school teacher','nursing aid','ophthalmic optician','payroll clerk',
+'personal carer in an institution for the elderly','personal carer in an institution for the handicapped',
+'personal carer in private homes','personnel clerk','pest controller','physician assistant','pipe fitter','plant maintenance mechanic',
+'plumber','police inspector','policy advisor','post secondary education teacher','post sorting or distributing clerk',
+'power plant operator','primary school head','primary school teacher','printing machine operator','psychologist',
+'quality inspector','receptionist','restaurant cook','road paviour','roofer','sailor','sales assistant','sales or marketing manager',
+'sales representative','sales support clerk','seaman','secondary school manager','secondary school teacher','secretary','security guard',
+ 'sheet metal worker','ship mechanic','shoe repairer','leather repairer','social photographer','soldier','speech therapist','steel fixer',
+ 'stockman','structural engineer','surgeon','surgical footwear maker','swimming instructor','tailor','seamstress','tax inspector',
+ 'taxi driver','tile layer','transport clerk','travel agency clerk','truck driver long distances','university professor',
+ 'university researcher','veterinary practitioner','vocational education teacher','waiting staff','web developer','welder',
+ 'wood processing plant operator','volunteer']
+
+    #for i in range(0, len(stopwords_free_sentences_list)):
+    #print stopwords_free_sentences_list
+    tokens = nltk.word_tokenize(stopwords_free_sentences_list)
+    tagged = nltk.pos_tag(tokens)
+    entities = nltk.chunk.ne_chunk(tagged)
+    #print 'Entities in sentences are :', entities
+    #print type(entities)
+    count=0
+    ent_list=[]
+    for i in range(0, len(entities)):
+        ent_list.append(str(entities[i]))
+
+    #print ent_list
+
+    person_name_list=[]
+    org_name_list=[]
+    loc_name_list=[]
+    month_name_list=[]
+    time_name_list=[]
+    profession_name_list=[]
+    temp_list=[]
+
+    ##### All the different entities start with a fixed format of x characters and so using them as the start position
+    ##### for different categories
+
+    p_start = 8
+    o_start=14
+    l_start=5
+    s=""
 
 
-    for i in range(0, len(stopwords_free_sentences_list)):
-        tokens = nltk.word_tokenize(stopwords_free_sentences_list[i])
-        tagged = nltk.pos_tag(tokens)
-        entities = nltk.chunk.ne_chunk(tagged)
-        #print 'Entities in sentences are :', entities
-        #print type(entities)
-        count=0
-        ent_list=[]
-        for i in range(0, len(entities)):
-            ent_list.append(str(entities[i]))
 
-        #print ent_list
+    ######### PERSON ENTITY #####
 
-        person_name_list=[]
-        org_name_list=[]
-        loc_name_list=[]
-        month_name_list=[]
-        time_name_list=[]
-        temp_list=[]
+    for i in range(0, len(ent_list)):
+        comma_index= ent_list[i].find(",")
+        if 'PERSON' in ent_list[i]:
+            #print 'ent_list[i]', ent_list[i]
+            person_index_list = [m.start() for m in re.finditer('/NNP', ent_list[i])]
+            #print 'Person index list is :', person_index_list
+            if len(person_index_list) == 1:
+                #print 'single person'
+                person_name_list.append(ent_list[i][p_start:person_index_list[0]])
+                #print 'person:',person_name_list
+                #continue
+            elif len(person_index_list) > 1:
+                for j in range(0, len(person_index_list)):
+                    temp_list.append(ent_list[i][p_start:person_index_list[j]])
+                    #print temp_list
+                    p_start=person_index_list[j]+5
+                    #print person_name_list
+                t=' '.join(temp_list)
+                p_start=8
+                temp_list=[]
+                person_name_list.append(t)
 
-        ##### All the different entities start with a fixed format of x characters and so using them as the start position
-        ##### for different categories
-
-        p_start = 8
-        o_start=14
-        l_start=5
-        s=""
-
-
-        ######### PERSON ENTITY #####
-
-        for i in range(0, len(ent_list)):
-                if 'PERSON' in ent_list[i]:
-                    #print 'ent_list[i]', ent_list[i]
-                    person_index_list = [m.start() for m in re.finditer('/NNP', ent_list[i])]
-                    #print 'Person index list is :', person_index_list
-                    if len(person_index_list) == 1:
-                        #print 'single person'
-                        person_name_list.append(ent_list[i][p_start:person_index_list[0]])
-                        #print 'person:',person_name_list
-                        #continue
-                    elif len(person_index_list) > 1:
-                        for j in range(0, len(person_index_list)):
-                            temp_list.append(ent_list[i][p_start:person_index_list[j]])
-                            #print temp_list
-                            p_start=person_index_list[j]+5
-                            #print person_name_list
-                        t=' '.join(temp_list)
-                        p_start=8
-                        temp_list=[]
-                        person_name_list.append(t)
-
-                #####  ORGANIZATION ENTITY ###########
-                elif 'ORGANIZATION' in ent_list[i]:
-                    #print 'ent_list[i]', ent_list[i]
-                    org_index_list = [m.start() for m in re.finditer('/NNP', ent_list[i])]
-                    #print 'org index list is :', org_index_list
-                    if len(org_index_list) == 1:
-                        #print 'single org'
-                        org_name_list.append(ent_list[i][o_start:org_index_list[0]])
-                        #print 'org:',org_name_list
-                        #continue
-                    elif len(org_index_list) > 1:
-                        for j in range(0, len(org_index_list)):
-                            temp_list.append(ent_list[i][o_start:org_index_list[j]])
-                            #print temp_list
-                            o_start=org_index_list[j]+5
-                            #print person_name_list
-                        t=' '.join(temp_list)
-                        o_start=14
-                        temp_list=[]
-                        org_name_list.append(t)
+        #####  ORGANIZATION ENTITY ###########
+        elif 'ORGANIZATION' in ent_list[i]:
+            #print 'ent_list[i]', ent_list[i]
+            org_index_list = [m.start() for m in re.finditer('/NNP', ent_list[i])]
+            #print 'org index list is :', org_index_list
+            if len(org_index_list) == 1:
+                #print 'single org'
+                org_name_list.append(ent_list[i][o_start:org_index_list[0]])
+                #print 'org:',org_name_list
+                #continue
+            elif len(org_index_list) > 1:
+                for j in range(0, len(org_index_list)):
+                    temp_list.append(ent_list[i][o_start:org_index_list[j]])
+                    #print temp_list
+                    o_start=org_index_list[j]+5
+                    #print person_name_list
+                t=' '.join(temp_list)
+                o_start=14
+                temp_list=[]
+                org_name_list.append(t)
 
 
-                ########## LOCATION ENTITY ###########
-                elif 'GPE' in ent_list[i]:
-                    #print 'ent_list[i]', ent_list[i]
-                    loc_index_list = [m.start() for m in re.finditer('/NNP', ent_list[i])]
-                    #print 'loc index list is :', loc_index_list
-                    if len(loc_index_list) == 1:
-                        #print 'single loc'
-                        loc_name_list.append(ent_list[i][l_start:loc_index_list[0]])
-                        #print 'loc:',loc_name_list
-                        #continue
-                    elif len(loc_index_list) > 1:
-                        for j in range(0, len(loc_index_list)):
-                            temp_list.append(ent_list[i][l_start:loc_index_list[j]])
-                            #print temp_list
-                            l_start=loc_index_list[j]+5
-                            #print person_name_list
-                        t=' '.join(temp_list)
-                        l_start=5
-                        temp_list=[]
-                        loc_name_list.append(t)
+        ########## LOCATION ENTITY ###########
+        elif 'GPE' in ent_list[i]:
+            #print 'ent_list[i]', ent_list[i]
+            loc_index_list = [m.start() for m in re.finditer('/NNP', ent_list[i])]
+            #print 'loc index list is :', loc_index_list
+            if len(loc_index_list) == 1:
+                #print 'single loc'
+                loc_name_list.append(ent_list[i][l_start:loc_index_list[0]])
+                #print 'loc:',loc_name_list
+                #continue
+            elif len(loc_index_list) > 1:
+                for j in range(0, len(loc_index_list)):
+                    temp_list.append(ent_list[i][l_start:loc_index_list[j]])
+                    #print temp_list
+                    l_start=loc_index_list[j]+5
+                    #print loc_name_list
+                t=' '.join(temp_list)
+                l_start=5
+                temp_list=[]
+                loc_name_list.append(t)
 
-                ########## MONTH ENTITY ################
-
-                elif ent_list[i][0] in months:
-                    slash_index=ent_list[i].find("/")
-                    month_name_list.append(ent_list[i][:slash_index])
-
-                ########## TIME ENTITY ##################
-
-                elif ent_list[i][0] in time:
-                    slash_index=ent_list[i].find("/")
-                    time_name_list.append(ent_list[i][:slash_index])
+            ########## MONTH ENTITY ################
 
 
-                ######## PROPER_NOUN ##############
+        elif ent_list[i][2:comma_index-1].lower() in months:
+            month_name_list.append(ent_list[i][2:comma_index-1])
+
+            ########## TIME ENTITY ##################
+
+        elif ent_list[i][2:comma_index-1].lower() in time:
+            time_name_list.append(ent_list[i][2:comma_index-1])
 
 
-        final_person_list.append(person_name_list)
-        final_org_list.append(org_name_list)
-        final_loc_list.append(loc_name_list)
-        final_month_list.append(month_name_list)
-        final_time_list.append(time_name_list)
+            ######## PROFESSION ##############
+
+        word=ent_list[i][2:comma_index-1]
+
+        if word.lower() in profession:
+            #print 'Word is:',word
+            #print 'True, yes its a profession',
+            #print 'before:', profession_name_list
+            profession_name_list.append(ent_list[i][2:comma_index-1])
+            #print 'after:',profession_name_list
+
+    '''final_person_list.append(person_name_list)
+    final_org_list.append(org_name_list)
+    final_loc_list.append(loc_name_list)
+    final_month_list.append(month_name_list)
+    final_time_list.append(time_name_list)'''
 
 
-    print 'Person name list is :',final_person_list
-    print 'Org name list is :',final_org_list
-    print 'Loc name list is :',final_loc_list
+    #print 'Person name list is :',person_name_list
+    #print 'Org name list is :',org_name_list
+    #print 'Loc name list is :',loc_name_list
 
 
-    return final_person_list,final_org_list,final_loc_list
+    #return final_person_list,final_org_list,final_loc_list
+    return person_name_list,org_name_list,loc_name_list,profession_name_list
 
