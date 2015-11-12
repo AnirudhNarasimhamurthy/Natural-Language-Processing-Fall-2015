@@ -12,6 +12,9 @@ import who
 import when
 import where
 import what
+import why
+
+
 from time import gmtime, strftime
 
 
@@ -64,6 +67,7 @@ for i in range(1, len(data)):
 
     stops = set(stopwords.words('english'))
     stops.remove("this")
+    stops.remove("so")
 
     #print 'Number of stop words in NLTK library is :',len(stops)
 
@@ -142,7 +146,8 @@ for i in range(1, len(data)):
                 answer_list.append(where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='why':
-                why_list.append(cleansedqList[i])
+                #why_list.append(cleansedqList[i])
+                answer_list.append(why.answering_why(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='how':
                 how_list.append(cleansedqList[i])
