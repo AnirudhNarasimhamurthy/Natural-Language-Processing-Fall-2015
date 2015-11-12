@@ -10,6 +10,7 @@ import WM
 import NET
 import who
 import when
+import where
 from time import gmtime, strftime
 
 
@@ -125,20 +126,20 @@ for i in range(1, len(data)):
         for j in range(0, len(qWords)):
             if qWords[j].lower()=='who':
                 #print 'Who question',cleansedqList[i]
-                answer_list.append(who.answering_who(qList[i],cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list)) #stopwords_free_sentences_list
-                #who_list.append(cleansedqList[i])
-                #answer_list.append(result)
+                answer_list.append(who.answering_who(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list)) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='what':
                 what_list.append(cleansedqList[i])
                 break
             elif qWords[j].lower()=='when':
-                answer_list.append(when.answering_when(qList[i],cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
+                answer_list.append(when.answering_when(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 #who_list.append(cleansedqList[i])
                 #answer_list.append(result)
                 break
             elif qWords[j].lower()=='where':
-                where_list.append(cleansedqList[i])
+                #where_list.append(cleansedqList[i])
+                answer_list.append(where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
+
                 break
             elif qWords[j].lower()=='why':
                 why_list.append(cleansedqList[i])
