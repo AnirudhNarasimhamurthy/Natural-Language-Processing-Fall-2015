@@ -13,6 +13,7 @@ import when
 import where
 import what
 import why
+import how
 
 
 from time import gmtime, strftime
@@ -150,7 +151,8 @@ for i in range(1, len(data)):
                 answer_list.append(why.answering_why(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='how':
-                how_list.append(cleansedqList[i])
+                #how_list.append(cleansedqList[i])
+                answer_list.append(how.answering_how(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 break
 
     '''print 'Questions belonging to who list:', who_list
