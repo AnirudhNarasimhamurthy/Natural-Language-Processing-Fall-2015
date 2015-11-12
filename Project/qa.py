@@ -9,6 +9,7 @@ import QP
 import WM
 import NET
 import who
+import when
 from time import gmtime, strftime
 
 
@@ -60,6 +61,7 @@ for i in range(1, len(data)):
     #### Removing the stop words from  each sentence using NLTK's stopwords and then creating a final stop word free sentence list ###
 
     stops = set(stopwords.words('english'))
+    stops.remove("this")
 
     #print 'Number of stop words in NLTK library is :',len(stops)
 
@@ -119,7 +121,7 @@ for i in range(1, len(data)):
 
     for i in range(0, len(cleansedqList)):
         qWords= cleansedqList[i].split()
-        #print 'Question is :',cleansedqList[i]
+        print qIDList[i]
         for j in range(0, len(qWords)):
             if qWords[j].lower()=='who':
                 #print 'Who question',cleansedqList[i]
@@ -131,7 +133,9 @@ for i in range(1, len(data)):
                 what_list.append(cleansedqList[i])
                 break
             elif qWords[j].lower()=='when':
-                when_list.append(cleansedqList[i])
+                answer_list.append(when.answering_when(qList[i],cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
+                #who_list.append(cleansedqList[i])
+                #answer_list.append(result)
                 break
             elif qWords[j].lower()=='where':
                 where_list.append(cleansedqList[i])
@@ -210,7 +214,7 @@ for i in range(1, len(data)):
 
     ####################### Building the response file #############################################
 
-    with open ("AnswerResponse","a") as f:
+    with open ("AnswerResponse","w") as f:
 	    for i in range(0, len(qIDList)):
                 f.write(qIDList[i])
                 f.write("\n")
