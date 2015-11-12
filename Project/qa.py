@@ -11,6 +11,7 @@ import NET
 import who
 import when
 import where
+import what
 from time import gmtime, strftime
 
 
@@ -129,17 +130,16 @@ for i in range(1, len(data)):
                 answer_list.append(who.answering_who(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list)) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='what':
-                what_list.append(cleansedqList[i])
+                #what_list.append(cleansedqList[i])
+                answer_list.append(what.answering_what(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='when':
-                answer_list.append(when.answering_when(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 #who_list.append(cleansedqList[i])
-                #answer_list.append(result)
+                answer_list.append(when.answering_when(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='where':
                 #where_list.append(cleansedqList[i])
                 answer_list.append(where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
-
                 break
             elif qWords[j].lower()=='why':
                 why_list.append(cleansedqList[i])
