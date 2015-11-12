@@ -1,16 +1,86 @@
 __author__ = 'Anirudh'
 
-def wordMatch(question,sentence):
-    question_words_set=set(question.split())
-    sentence_words_set=set(sentence.split())
+from nltk.stem.lancaster import LancasterStemmer
+from nltk.stem import SnowballStemmer
+import nltk
 
-    [x.lower() for x in question_words_set]
+def stemWordMatch2(question,sentence):
+
+
+    question_tokens = set(nltk.word_tokenize(question))
+    sentence_tokens=set(nltk.word_tokenize(sentence))
+
+    #  Finding the match between two words from the same root  using Lancaster Stemmizer
+
+    '''stemmer=LancasterStemmer()
+
+    for i in sentence_tokens:
+        stem_words_list.append(stemmer.stem(i))
+
+    for i in question_tokens:
+        question_words_list.append(stemmer.stem(i))
+
+    #print 'Stem word list',stem_words_list
+    #print 'Question word list', question_words_list
+
+    stem_count=0
+    for i in stem_words_list:
+        #Finding the exact word match
+        if i.lower() in [x.lower() for x in question_words_list]:
+            #print 'Question word is',x
+            #print 'Sentence word stem is :',i
+            #print 'Match'
+            stem_count=stem_count+6
+    stem_word_match_counter.append(count)'''
+
+    stem_word_match_counter=[]
+    stem_words_list=[]
+    question_words_list=[]
+
+    #  Finding the match between two words from the same root  using Snowball Stemmizer
+
+    snowball_stemmer = SnowballStemmer('english')
+
+    for i in sentence_tokens:
+        stem_words_list.append(snowball_stemmer.stem(i))
+
+    for i in question_tokens:
+        question_words_list.append(snowball_stemmer.stem(i))
+
+    #print 'Stem word list',stem_words_list
+    #print 'Question word list', question_words_list
+
+    stem_count=0
+    for i in stem_words_list:
+        #Finding the exact word match
+        if i.lower() in [x.lower() for x in question_words_list]:
+            #print 'Question word is',x
+            #print 'Sentence word stem is :',i
+            #print 'Match'
+            stem_count=stem_count+6
+    #print 'Stem word count match score is :', stem_count
+
+    return stem_count
+
+
+
+def stemWordMatch(question,sentence):
+
+    snowball_stemmer = SnowballStemmer('english')
+
+    question_tokens = set(nltk.word_tokenize(question))
+    sentence_tokens=set(nltk.word_tokenize(sentence))
+
+    #print 'Question is :',question_tokens
+    #print 'Sentence is :',sentence_tokens
     count=0
-    for i in sentence_words_set:
-        if i.lower() in [x.lower() for x in question_words_set]:
-            count=count+1
-    if count > 1:
-        #print 'Question words set:',question_words_set
-        #print 'Sentence words set:', sentence_words_set
-        print 'No of words that appear in both question and sentence is',count
+    for i in sentence_tokens:
+        #Finding the exact word match
+        if snowball_stemmer.stem(i).lower() in  [snowball_stemmer.stem(x).lower() for x in question_tokens]:
+            count=count+6
+        elif i.lower() in [x.lower() for x in question_tokens]:
+            count=count+3
+    #print 'Exact word match count is :',count
     return count
+
+
