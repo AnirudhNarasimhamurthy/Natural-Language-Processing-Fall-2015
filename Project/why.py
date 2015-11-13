@@ -3,6 +3,7 @@ __author__ = 'Anirudh'
 import WM
 import NET
 import nltk
+#nltk.data.path.append("/home/alangar/nltk_data")
 from nltk.stem import SnowballStemmer
 
 # The selection of answer is based on the sentence which gets the maximum total score across the four conditions ##
@@ -34,7 +35,7 @@ def answering_why(cleansedQuestion,stop_words_free_question,complete_sentence_li
           'am','pm','sunrise','sunset','lunchtime','teatime','dinnertime','interval','twilight',
           'hourly','nightly','daily','monthly','weekly','quarterly','yearly']
 
-    print 'Question is :',cleansedQuestion
+    #print 'Question is :',cleansedQuestion
 
 
     snowball_stemmer = SnowballStemmer('english')
@@ -56,7 +57,7 @@ def answering_why(cleansedQuestion,stop_words_free_question,complete_sentence_li
         if sent_score_list[i]==max_score_value:
             best.append((complete_sentence_list[i],i))
 
-    print 'Best list is:',best
+    #print 'Best list is:',best
 
 
     # Finding indices of the best sentences
@@ -117,18 +118,20 @@ def answering_why(cleansedQuestion,stop_words_free_question,complete_sentence_li
          if sent_score_list[i]==max_score_value:
                 final_sent_list.append(complete_sentence_list[i])
 
-    print 'Final list is:', final_sent_list
+    #print 'Final list is:', final_sent_list
     temp_solution=[]
     answer_loc=[]
     if len(final_sent_list) == 1:
-        print 'Result is:',final_sent_list[0]
+        print 'Answer: ',final_sent_list[0]+'\n'
+        #print '\n'
         return final_sent_list[0]
 
     else:
         # Choose the sentence that comes at the last, in case of a tie
         for k in range(0,len(final_sent_list)):
             result=final_sent_list[k]
-        print 'Result is :', result
+        print 'Answer: ', result+'\n'
+        #print '\n'
         return result
 
 

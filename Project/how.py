@@ -3,6 +3,7 @@ __author__ = 'Anirudh'
 import WM
 import NET
 import nltk
+#nltk.data.path.append("/home/alangar/nltk_data")
 import re
 from nltk.stem import SnowballStemmer
 
@@ -43,7 +44,7 @@ def answering_how(cleansedQuestion,stop_words_free_question,complete_sentence_li
 
     measurement_verbs=[]
 
-    print 'Question is :',cleansedQuestion
+    #print 'Question is :',cleansedQuestion
 
 
     snowball_stemmer = SnowballStemmer('english')
@@ -121,7 +122,7 @@ def answering_how(cleansedQuestion,stop_words_free_question,complete_sentence_li
         if sent_score_list[i]==max_score_value:
             final_sent_list.append(complete_sentence_list[i])
 
-    print 'Final sent list is:',final_sent_list
+    #print 'Final sent list is:',final_sent_list
 
     temp_solution=[]
     answer_loc=[]
@@ -137,7 +138,8 @@ def answering_how(cleansedQuestion,stop_words_free_question,complete_sentence_li
             for m in range(0,len(temp2)):
                 if temp2[m] in how_often:
                     temp_solution.append(temp2[m])
-            print 'Result is:',' '.join(temp_solution)
+            print 'Answer: ',' '.join(temp_solution)+'\n'
+            #print '\n'
             return temp_solution
 
         if 'many' in temp:
@@ -146,13 +148,15 @@ def answering_how(cleansedQuestion,stop_words_free_question,complete_sentence_li
             for m in range(0,len(temp2)):
                 if nums.match(temp2[m]):
                     temp_solution.append(temp2[m])
-            print 'Result is:',' '.join(temp_solution)
+            print 'Answer: ',' '.join(temp_solution)+'\n'
+            #print '\n'
             return temp_solution
 
 
         else:
 
-            print 'Result is:',final_sent_list[0]
+            print 'Answer: ',final_sent_list[0]+'\n'
+            #print '\n'
             return final_sent_list[0]
 
     else:
@@ -161,7 +165,8 @@ def answering_how(cleansedQuestion,stop_words_free_question,complete_sentence_li
             result=final_sent_list[k]
             break
 
-        print 'Result is :', result
+        print 'Answer: ', result+'\n'
+        #print '\n'
         return result
 
 

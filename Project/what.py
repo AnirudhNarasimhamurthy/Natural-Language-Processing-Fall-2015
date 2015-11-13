@@ -3,6 +3,7 @@ __author__ = 'Anirudh'
 import WM
 import NET
 import nltk
+#nltk.data.path.append("/home/alangar/nltk_data")
 from nltk.stem import SnowballStemmer
 
 # The selection of answer is based on the sentence which gets the maximum total score across the four conditions ##
@@ -33,13 +34,13 @@ def answering_what(cleansedQuestion,stop_words_free_question,complete_sentence_l
           'am','pm','sunrise','sunset','lunchtime','teatime','dinnertime','interval','twilight',
           'hourly','nightly','daily','monthly','weekly','quarterly','yearly']
 
-    print 'Question is :',cleansedQuestion
+    #print 'Question is :',cleansedQuestion
 
 
     snowball_stemmer = SnowballStemmer('english')
     # 1. Find score for each sentence using word march score first
 
-    for i in range(0,len(sentence_list)):
+    for i in range(0,len(complete_sentence_list)):
         score=0
 
         score = score + WM.stemWordMatch(cleansedQuestion,sentence_list[i])
@@ -67,10 +68,12 @@ def answering_what(cleansedQuestion,stop_words_free_question,complete_sentence_l
             # 4. If question contains "name" and the sentence contains {name,call,known}
 
             if temp[j].lower() =='name':
-                temp2=sentence_list[i].split()
+                temp2=complete_sentence_list[i].split()
                 for k in range(0,len(temp2)):
                     if snowball_stemmer.stem(temp2[k]) in ['name','call','known']:
-                        count=count+20
+                        score=score+20
+
+            #5. If question contains name + PP and contains(S,ProperNoun) and Head PP
 
             if j != len(temp) -1 and temp[j]=='name' and temp[j+1] in ['of','for']:
                  person_list,org_list,loc_list,time_list,prof_list = NET.named_entity_tagging(sentence_list[i])
@@ -85,10 +88,17 @@ def answering_what(cleansedQuestion,stop_words_free_question,complete_sentence_l
                     if snowball_stemmer.stem(temp2[k]) in ['soccer','hockey','baseball','cricket','rugby','ultimate']:
                         score=score+6'''
 
+            # If the sentence contains a  "country" name and the sentence contains a LOCATION, then it is confident score
+            if temp[j].lower() in ['country','countries','olympics']:
+                person_list,org_list,loc_list,time_list,prof_list = NET.named_entity_tagging(sentence_list[i])
+                if loc_list != []:
+                    score=score + 6*len(loc_list)  # Confidence score increases with increasing number of countries appearing in the sentence.
+
+
 
         sent_score_list.append(score)
 
-    print 'Sent score list values are:',sent_score_list
+    #print 'Sent score list values are:',sent_score_list
 
     # Selecting the sentence that has the maximum score.
 
@@ -101,19 +111,26 @@ def answering_what(cleansedQuestion,stop_words_free_question,complete_sentence_l
 
     for i in range(0, len(sent_score_list)):
          if sent_score_list[i]==max_score_value:
-                final_sent_list.append(sentence_list[i])
+                final_sent_list.append(complete_sentence_list[i])
 
-    print 'Final list is:', final_sent_list
+    #print 'Final list is:', final_sent_list
     temp_solution=[]
     answer_loc=[]
     if len(final_sent_list) == 1:
-        print 'Result is:',final_sent_list[0]
+        print 'Answer: ',final_sent_list[0] +'\n'
+        #print '\n'
         return final_sent_list[0]
 
     else:
 
-        result=' '.join(final_sent_list)
-        print 'Result is :', result
+        for i in range(0,len(final_sent_list)):
+            temp=final_sent_list[i]
+            break
+
+        #result=' '.join(final_sent_list)
+        result=temp
+        print 'Answer: ', result +'\n'
+        #print '\n'
         return result
 
 

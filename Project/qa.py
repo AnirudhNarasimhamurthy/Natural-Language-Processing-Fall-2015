@@ -3,8 +3,8 @@ __author__ = 'Anirudh'
 
 import sys
 import nltk
+#nltk.data.path.append("/home/alangar/nltk_data")
 from nltk.corpus import stopwords
-from nltk.tag.stanford import NERTagger
 import QP
 import WM
 import NET
@@ -17,6 +17,11 @@ import how
 
 
 from time import gmtime, strftime
+
+#Global lists
+answer_list=[]
+question_list=[]
+
 
 
 ################ Getting the input file from the command line arguments ###########################
@@ -124,36 +129,60 @@ for i in range(1, len(data)):
     ################### CATEGORIZING THE QUESTION AS WH0, WHAT, WHEN , WHY , WHERE OR HOW  ########################
 
     who_list,what_list,when_list,why_list,where_list,how_list=[],[],[],[],[],[]
-    answer_list=[]
+
 
     for i in range(0, len(cleansedqList)):
         qWords= cleansedqList[i].split()
         print qIDList[i]
+        q_flag=0
+        question_list.append(qIDList[i])
         for j in range(0, len(qWords)):
             if qWords[j].lower()=='who':
                 #print 'Who question',cleansedqList[i]
+                q_flag=1
                 answer_list.append(who.answering_who(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list)) #stopwords_free_sentences_list
+                #result=who.answering_who(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='what':
                 #what_list.append(cleansedqList[i])
+                q_flag=1
                 answer_list.append(what.answering_what(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
+                #result=what.answering_what(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date) #stopwords_free_sentences_list
+
                 break
             elif qWords[j].lower()=='when':
                 #who_list.append(cleansedqList[i])
+                q_flag=1
                 answer_list.append(when.answering_when(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
+                #result=when.answering_when(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list,hline_date) #stopwords_free_sentences_list
+
                 break
             elif qWords[j].lower()=='where':
                 #where_list.append(cleansedqList[i])
+                q_flag=1
                 answer_list.append(where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
+                #result=where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date) #stopwords_free_sentences_list
+
                 break
             elif qWords[j].lower()=='why':
                 #why_list.append(cleansedqList[i])
+                q_flag=1
                 answer_list.append(why.answering_why(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
+                #result=why.answering_why(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date) #stopwords_free_sentences_list
+
                 break
             elif qWords[j].lower()=='how':
                 #how_list.append(cleansedqList[i])
+                q_flag=1
                 answer_list.append(how.answering_how(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
+                #result=how.answering_how(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date) #stopwords_free_sentences_list
                 break
+            else:
+                answer_list.append('No answer')
+                #print 'Answer:  No answer'+'\n'
+        if q_flag == 0:
+            print 'Answer: No answer'+'\n'
+
 
     '''print 'Questions belonging to who list:', who_list
     print 'Questions belonging to what list:', what_list
@@ -185,10 +214,10 @@ for i in range(1, len(data)):
 
 
     ####### Named  Entity tagging using Stanford NER system for PERSON, ORGANIZATION and LOCATION entities #############
-    NER_list=[]
+    #NER_list=[]
 
-    st = NERTagger('/Users/Anirudh/Desktop/Fall 2015/NLP/Natural-Language-Processing-Fall-2015/Project/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz',
-                   '/Users/Anirudh/Desktop/Fall 2015/NLP/Natural-Language-Processing-Fall-2015/Project/stanford-ner-2014-06-16/stanford-ner.jar')
+    '''st = NERTagger('/Users/Anirudh/Desktop/Fall 2015/NLP/Natural-Language-Processing-Fall-2015/Project/stanford-ner-2014-06-16/classifiers/english.all.3class.distsim.crf.ser.gz',
+                   '/Users/Anirudh/Desktop/Fall 2015/NLP/Natural-Language-Processing-Fall-2015/Project/stanford-ner-2014-06-16/stanford-ner.jar')'''
 
 
     '''for i in range(0, len(stopwords_free_sentences_list)):
@@ -217,18 +246,18 @@ for i in range(1, len(data)):
 
         #print 'Entities in question are :', entities'''
 
+#print 'Question list:',question_list
+#print 'Answer list:',answer_list
 
+####################### Building the response file #############################################
 
-
-    ####################### Building the response file #############################################
-
-    with open ("AnswerResponse","w") as f:
-	    for i in range(0, len(qIDList)):
-                f.write(qIDList[i])
-                f.write("\n")
-                f.write("Answer: ")
-                #f.write(answer_list[i])
-                f.write("\n\n")
+'''with open ("AnswerResponse","w") as f:
+	for i in range(0, len(question_list)):
+            f.write(question_list[i])
+            f.write("\n")
+            f.write("Answer: ")
+            f.write(answer_list[i])
+            f.write("\n\n")'''
 
 
 

@@ -2,6 +2,7 @@ __author__ = 'Anirudh'
 
 from nltk.stem.lancaster import LancasterStemmer
 from nltk.stem import SnowballStemmer
+#nltk.data.path.append("/home/alangar/nltk_data")
 import nltk
 
 def stemWordMatch2(question,sentence):
