@@ -26,11 +26,11 @@ def named_entity_recognition(stopwords_free_sentences_list):
     temp_list=[]
 
 
-    time=['yesterday','today','tomorrow','last week','this week','next week','an hour ago','now','in an hour',
+    time=['yesterday','today','tomorrow','weekend','an hour ago','in an hour','time',
           'recently','soon','age','ago','old','a little while ago','at this moment','in the near future','a long time ago','these days',
           'those days','way off in the future','in the past','nowadays','eventually','this morning','at this time',
           'later this evening','morning', 'evening','night','midnight','dawn','dusk','afternoon','noon','midday',
-          'am','pm','sunrise','sunset','lunchtime','teatime','dinnertime','interval','twilight',
+          'am','pm','sunrise','sunset','lunchtime','teatime','dinnertime','interval','twilight','beginning',
           'hourly','nightly','daily','monthly','weekly','quarterly','yearly',
           'fall','winter','equinox','solstice',
           'january','february','march','april','may','june','july','august','september','october','november','december',
@@ -42,14 +42,14 @@ def named_entity_recognition(stopwords_free_sentences_list):
                 'artist','astrologer','astronomer','athlete','auctioneer','auditor',
                 'baker','banker','barber','beautician','biologist','biochemist','botanist','butler',
                 'caretaker','carpenter','cartographer','chemist','choreographer','cleaner','clerk','composer','commentator','reporter','journalist',
-                'conductor','cook','dancer','director','diver','dresser','driller','doctor',
+                'conductor','cook','dancer','diver','dresser','driller','doctor','director',
                 'editor','economist','electrician','engineer',
-                'farmer','firefighter','fisherman','geographer','geologist','gardener','goldsmith','historian',
+                'farmer','firefighter','fisherman','geographer','geologist','gardener','goldsmith','historian','lawyer',
                 'manager','miner','metrologist','meteorologist','musician',
-                'nurse','officer','packer','pawnbroker','pharmacist','philosopher','photographer','pilot','police',
+                'nurse','officer','packer','pawnbroker','pharmacist','philosopher','photographer','police',
                 'principal','producer','psychologist','psychiatrist','registrar','referee',
                 'singer','songwriter','statistician','stockbroker','tailor','teller','tutor',
-                'husband','wife','administrative services department manager','agricultural advisor','air-conditioning installer','mechanic',
+                'husband','administrative services department manager','agricultural advisor','air-conditioning installer','mechanic',
 'aircraft service technician','ambulance driver','animal carer','arable farm manager','arable farmer','architect',
 'asbestos removal worker','assembler','leader','assembly team leader','team leader','bank clerk','beauty therapist',
 'beverage production process controller','boring machine operator','bricklayer','butcher','car mechanic','charge nurse',
@@ -62,7 +62,7 @@ def named_entity_recognition(stopwords_free_sentences_list):
 'first line supervisor of cleaning workers','flight attendant','floral arranger','food scientist','garage supervisor','gardener',
 'general practitioner','hairdresser','head groundsman','horse riding instructor','hospital nurse','hotel manager','house painter',
 'hr manager','it applications programmer','it systems administrator','journalist','judge','kitchen assistant','lathe setter-operator',
-'lawyer','legal secretary','legal expert','local police officer','logistics manager','machine tool operator','health services manager',
+'legal secretary','legal expert','local police officer','logistics manager','machine tool operator','health services manager',
 'meat processing operator','mechanical engineering technician','medical laboratory technician','medical radiography equipment operator',
 'metal moulder','metal production process operator','meteorologist','midwifery professional','mortgage clerk','musical instrument maker',
 'non-commissioned officer armed forces','nursery school teacher','nursing aid','ophthalmic optician','payroll clerk',
@@ -86,6 +86,7 @@ def named_entity_recognition(stopwords_free_sentences_list):
     #print 'NER List:', NER_list
 
     for i in range(0,len(NER_list)):
+        #print NER_list[i][0].lower()
         if NER_list[i][1]=='PERSON':
             #print 'Person true'
             person_list.append(NER_list[i][0])

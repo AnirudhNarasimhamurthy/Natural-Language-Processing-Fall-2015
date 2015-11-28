@@ -85,8 +85,10 @@ def stemWordMatch(question,sentence):
     for i in sentence_tokens:
         #Finding the exact word match
         if lmtzr.lemmatize(i, 'v').lower() in  [lmtzr.lemmatize(x, 'v').lower() for x in question_tokens]:
+            #print  'matching word is:',i
             count=count+6
         elif i.lower() in [x.lower() for x in question_tokens]:
+            #print 'i is :',i
             count=count+3
     #print 'Exact word match count is :',count
     return count

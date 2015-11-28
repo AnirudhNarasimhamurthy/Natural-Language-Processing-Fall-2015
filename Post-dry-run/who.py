@@ -27,12 +27,14 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
     temp_q=temp_q.replace("'",'"')
     temp_q=temp_q.replace('?','')
 
-    #print 'Temp_q: ',temp_q
+    print 'Temp_q: ',temp_q
 
     q_person_list,q_org_list,q_loc_list,q_month_list,q_time_list,q_money_list,q_percent_list,q_prof_list = NER.named_entity_recognition(temp_q)
 
     #print 'Q Person list:' ,q_person_list
     #print 'Q Prof list:',q_prof_list
+
+    #print 'Master person list is:',sent_person_list
 
     for i in range(0, len(complete_sentence_list)):
         #print 'Sentence is :', complete_sentence_list[i]
@@ -75,11 +77,10 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
         # then it is a confident clue and we reward it more
 
         sent_pos= POS_Tagging.pos_tagging(complete_sentence_list[i])
-        #q_pos=POS_Tagging.pos_tagging(cleansedQuestion)
-        #print sent_pos
+
         for m in range(0, len(sent_pos)):
             if sent_pos[m][1] in ['VB','VBD','VBN','VBG','VBZ'] and sent_pos[m][0] in stop_words_free_question.split():
-                print 'Yes main verb match found for the sentence'
+                #print 'Yes main verb match found for the sentence'
                 #print 'Sentence is :', complete_sentence_list[i]
                 score=score + 18
                 #print 'Score now is :', score
@@ -90,7 +91,7 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
         if q_prof_list!=[]:
             for k in complete_sentence_list[i].split():
                 if k.lower() in q_prof_list:
-                    print 'Profession Yes !'
+                    #print 'Profession Yes !'
                     score=score+18
 
         else:  #Question contains name so the chances of answer being a profession name are decent
@@ -175,6 +176,15 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
     result_list=[]
 
     if q_person_list==[] and s_plist==[]:   #If both the question does not have a name and the sentence does not have a name,print the whole sentence minus words which appear in question
+
+        '''pos_np_list= POS_Tagging.pos_noun_tagging(temp_str)
+        if pos_np_list != []:
+            for x in pos_np_list:
+                if x not in temp_q and x[0].isupper():   #Noun phrases or names generally start with an upper case character
+                    print 'First character caps',x
+                    result_list.append(x)
+            return ' '.join(result_list)'''
+
         for k in temp_str.split():
             if k not in temp_q:
                 result_list.append(k)
@@ -185,10 +195,14 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
         if s_plist[i] not in q_person_list and s_plist[i] not in temp_q:  #To counter situations where question has a name and NER doesn't identify it
             answer_list.append(s_plist[i])
 
+
     '''if answer_list !=[]:
         flag=1'''
 
     if q_person_list != [] and s_proflist !=[]:  #To counter situations for 'Who is X' type questions which could have a profession name in the answer
+        for k in s_proflist:
+            answer_list.append(k)
+    elif q_person_list==[] and s_proflist !=[]:
         for k in s_proflist:
             answer_list.append(k)
 
@@ -200,22 +214,11 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
 
         #Pick out the noun phrase or nouns and then display them as answer
 
-        #np_list= POS_Tagging.pos_person_tagging(candidate_list[0][0])
-        #print 'NP List returned is :',np_list
-        #if np_list == []:
-            #print 'Go check nouns now'
-        #np_list = POS_Tagging.pos_noun_tagging(candidate_list[0][0])
         np_list = POS_Tagging.pos_noun_tagging(temp_str)
-
-            #print npfinal_list
-        #else:
-            #for k in range(0, len(q_person_list)):
-                #np_list.remove(q_person_list[k])
-
         for x in np_list :
-                #if x not in q_person_list:
             if x not in temp_q:
                 npfinal_list.append(x) #Removing all occurences of existing noun phrases from the question
+
 
         print 'NP Final list after removal is',npfinal_list
         if npfinal_list !=[]:

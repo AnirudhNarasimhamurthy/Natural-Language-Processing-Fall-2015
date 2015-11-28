@@ -160,6 +160,7 @@ for i in range(1, len(data)):
 
     for i in range(0, len(sentences_list)):
         sentences_list[i]=sentences_list[i].replace(',','').replace('.','').replace('!','')
+        #sentences_list[i]=sentences_list[i].replace("'",'"')
         sent_person_list,sent_org_list,sent_loc_list,sent_month_list,sent_time_list,sent_money_list,sent_percent_list,sent_prof_list=NER.named_entity_recognition(sentences_list[i])
         master_person_list.append(sent_person_list)
         master_org_list.append(sent_org_list)
@@ -207,7 +208,7 @@ for i in range(1, len(data)):
                 #where_list.append(cleansedqList[i])
                 q_flag=1
                 #answer_list.append(where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
-                #result=where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date) #stopwords_free_sentences_list
+                result=where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date,master_loc_list) #stopwords_free_sentences_list
 
                 break
             elif qWords[j].lower()=='why':

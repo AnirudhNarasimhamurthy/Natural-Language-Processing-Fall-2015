@@ -1,3 +1,5 @@
 /home/anirudhn/Post-dry-run/testset1
-2000-W03-1.story
-2000-W03-2.story
+1999-W45-5.story
+1999-W41-5.story
+1999-W39-5.story
+1999-W39-1.story
