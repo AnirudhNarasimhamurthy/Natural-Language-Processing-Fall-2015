@@ -1,0 +1,42 @@
+README
+=======
+
+Project Dry Run Submission:
+===========================
+
+Team Members: Anirudh Narasimhamurthy(u0941400) and Vulpala shiva Priya(u1011589)
+
+1. The source code files and all the required files have been put in the folder named "Submission". The main python
+program is qa.py.There are several other files which I have written and made use of in my program. All of them are
+referenced in the way such that all these files are at the same level on a directory.
+
+I have made use of nltk library and with help from  CADE Opers, we were able to use the installation and set it up.
+
+
+2. To compile and run the code, please type the following:
+
+/usr/local/stow/python/amd64_linux26/python-3.5.0/bin/python3 qa.py inputfile
+
+Here qa.py is my source python file
+inputfile is the command line argument which contains the required input.
+Please keep in mind the path for the developset right now is pointing to the path in which I have my files in CADE machine.
+THe path has to be changed accordingly when you run it with new set of test cases.
+
+You can also do the following to copy the output to file
+
+/usr/local/stow/python/amd64_linux26/python-3.5.0/bin/python3 qa.py inputfile > output
+
+
+* Internally my code is now pointing to nltk_data folder of one of my class mates who has the folder on shared access. I also
+have my nltk_data folder with required permissions which would allow you to run. In case you encounter any issues
+kindly let me knwow and I could tell you what is required. My contact email is anirudhnmurthy@gmail.com
+
+I ran my program on CADE machine "lab2-12" for developset of all 73 files. During one of those runs it took around 15mins
+to execute, but when I was doing the second run it was taking more than 30 mins and is still running as I type in this report
+right now.
+
+In my local machine, the set of 73 files ran in roughly about 10-12 minutes.
+
+
+In case you have any issues with running the code or encounter any errors during the execution let me know. I have tested it
+although not exhaustively and it seems to be working fine.
