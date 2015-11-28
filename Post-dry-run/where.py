@@ -31,9 +31,6 @@ def answering_where(cleansedQuestion,stop_words_free_question,complete_sentence_
                            'in','inside','into','near','off','onto','opposite','outside','over','surrounding',
                            'round','through','towards','under','up']
 
-    '''in','at','near','inside','on','behind','above','under','next','below','between','around',
-                           'outside','among', 'across','front','opposite','before','beneath','beside','against']'''
-
 
     temp_q=cleansedQuestion
     temp_q=temp_q.replace('"','')
@@ -42,21 +39,21 @@ def answering_where(cleansedQuestion,stop_words_free_question,complete_sentence_
 
     print 'Question is :',temp_q
 
+    lmtzr=WordNetLemmatizer()
     pos_list= POS_Tagging.pos_tagging(temp_q)
 
     for i in range(0, len(pos_list)):
         if pos_list[i][1] in ['VB','VBD','VBZ','VBN'] and pos_list[i][0] not in stanford_stop_words_list:
-            q_verblist.append(pos_list[i][0])
+            q_verblist.append(lmtzr.lemmatize(pos_list[i][0],'v'))
 
     print 'Question verb list is :',q_verblist
-    print 'Master location list is:',sent_loc_list
+    #print 'Master location list is:',sent_loc_list
     # 1. Find score for each sentence using word march score first
 
     for i in range(0,len(sentence_list)):
         score=0
 
-        print 'Sentence is :',sentence_list[i]
-        #score= score + WM.stemWordMatch(cleansedQuestion,sentence_list[i])
+        #print 'Sentence is :',sentence_list[i]
         score= score + WM.stemWordMatch(stop_words_free_question,sentence_list[i])
         #print 'After wordmatch score is:',score
 
@@ -65,15 +62,12 @@ def answering_where(cleansedQuestion,stop_words_free_question,complete_sentence_
         for k in complete_sentence_list[i].split():
             if k in location_prepositions:
                 score=score+4
-        #print 'After location prepostion score is',score
 
         # 3. Check if the sentence contains Location entity
 
         if sent_loc_list[i] != []: # If sentence contains location
             score=score + 6
 
-        #print 'After location  score is',score
-        # 4.  Reward sentences which has the verb appearing in the question in its sentence
 
         # 4.  Reward sentences which has "from" in the question and in the answer too
 
@@ -84,11 +78,11 @@ def answering_where(cleansedQuestion,stop_words_free_question,complete_sentence_
             if k.lower()=='from':
                 #print 'From qflag is true'
                 from_qflag=1
-        if from_qflag==1 and 'from' in complete_sentence_list[i]:
+        if from_qflag==1 and 'from' in complete_sentence_list[i].split():
             print 'True:'
             if sent_loc_list[i] !=[]:
-                for m in sent_loc_list[i]:
-                    if m not in temp_q:
+                for m in sent_loc_list[i].split():
+                    if m not in temp_q.split():
                         cand_list.append(m)
             if cand_list!=[]:
                 return ' '.join(cand_list)
@@ -98,12 +92,14 @@ def answering_where(cleansedQuestion,stop_words_free_question,complete_sentence_
                         cand_list.append(k)
                 return ' '.join(cand_list)
 
-        '''sent_pos_list=POS_Tagging.pos_tagging(complete_sentence_list[i])
-        lmtzr=WordNetLemmatizer()
+        # 4.  Reward sentences which has the verb appearing in the question in its sentence
+
+        sent_pos_list=POS_Tagging.pos_tagging(complete_sentence_list[i])
+
         for k in range(0, len(sent_pos_list)):
-            if sent_pos_list[k][1] in ['VB','VBD','VBZ','VBN'] and lmtzr.lemmatize(sent_pos_list[k][0]) in q_verblist:
+            if sent_pos_list[k][1] in ['VB','VBD','VBZ','VBN'] and lmtzr.lemmatize(sent_pos_list[k][0],'v') in q_verblist:
                 print 'Verb in question and sentence matches'
-                score=score + 6'''
+                score=score + 6
 
         sent_score_list.append(score)
 
@@ -152,7 +148,7 @@ def answering_where(cleansedQuestion,stop_words_free_question,complete_sentence_
         pos_np_list=POS_Tagging.pos_NNP_tagging(complete_sentence_list[0])
         if pos_np_list !=[]:
             for k in pos_np_list:
-                if k not in temp_q:
+                if k not in temp_q.split():
                     first_list.append(k)
 
             return ' '.join(first_list)
@@ -225,15 +221,15 @@ def answering_where(cleansedQuestion,stop_words_free_question,complete_sentence_
                     return ' '.join(result_list)'''
 
             for k in temp_str.split():
-                if k not in temp_q:
+                if k not in temp_q.split():
                     result_list.append(k)
-                if result_list !=[]:
-                    return ' '.join(result_list)
+            if result_list !=[]:
+                return ' '.join(result_list)
 
 
         if s_loclist!=[]:
             for i in range(0, len(s_loclist)):
-                if s_loclist[i] not in temp_q :   #To counter situations where question has a location and NER doesn't identify it
+                if s_loclist[i] not in temp_q.split() :   #To counter situations where question has a location and NER doesn't identify it
                     answer_list.append(s_loclist[i])
 
         print 'Answer list is :',answer_list
@@ -247,21 +243,23 @@ def answering_where(cleansedQuestion,stop_words_free_question,complete_sentence_
 
         else:
 
-            np_list = POS_Tagging.pos_noun_tagging(temp_str)
+            '''np_list = POS_Tagging.pos_noun_tagging(temp_str)
             if np_list != []:
                 for k in np_list:
                     if k not in temp_q:
                         np_result_list.append(k)
 
-                return ' '.join(np_result_list)
+                return ' '.join(np_result_list)'''
 
 
 
-            '''for k in temp_str.split():
-                if k not in temp_q:
+            for k in temp_str.split():
+                print 'k is',k
+                if k not in temp_q.split():
+                    print 'Adding to final list', k
                     temp_result.append(k)
 
-            return ' '.join(temp_result)'''
+            return ' '.join(temp_result)
 
     # Dateline score is greater than the sent list score
     else:

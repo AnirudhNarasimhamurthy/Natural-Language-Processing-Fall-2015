@@ -88,7 +88,7 @@ def stemWordMatch(question,sentence):
             #print  'matching word is:',i
             count=count+6
         elif i.lower() in [x.lower() for x in question_tokens]:
-            #print 'i is :',i
+            print 'i is :',i
             count=count+3
     #print 'Exact word match count is :',count
     return count

@@ -126,7 +126,7 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
             #Cleaning up the candidate sentence
             # Replacing double quotes with blank and single quotes with "
             temp_str=temp_str.replace('"','')
-            temp_str=temp_str.replace("'",'"')
+            #temp_str=temp_str.replace("'",'"')
             temp_str=temp_str.replace(',','').replace('?','').replace('!','')
 
         # If there are multiple candidates, then choose the sentence which appeared first in the story and then do the processing
@@ -140,7 +140,7 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
                 #Cleaning up the candidate sentence
 
                 temp_str=temp_str.replace('"','')
-                temp_str=temp_str.replace("'",'"')
+                #temp_str=temp_str.replace("'",'"')
                 temp_str=temp_str.replace(',','').replace('?','').replace('!','')
 
                 break
@@ -191,7 +191,7 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
                     answer_list.append(s_timelist[i])
 
             # Time list values will usually have numbers or other prepositions before it which will give us the complete answer
-            time_prep=['over','period','within','inside','under','ago','through']
+            time_prep=['over','period','within','inside','under','ago','through','past']
 
             for k in temp_str.split():
                 if k.lower() in time_prep:

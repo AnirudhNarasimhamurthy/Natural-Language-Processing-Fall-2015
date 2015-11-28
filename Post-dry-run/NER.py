@@ -45,7 +45,7 @@ def named_entity_recognition(stopwords_free_sentences_list):
                 'conductor','cook','dancer','diver','dresser','driller','doctor','director',
                 'editor','economist','electrician','engineer',
                 'farmer','firefighter','fisherman','geographer','geologist','gardener','goldsmith','historian','lawyer',
-                'manager','miner','metrologist','meteorologist','musician',
+                'manager','miner','minister','metrologist','meteorologist','musician',
                 'nurse','officer','packer','pawnbroker','pharmacist','philosopher','photographer','police',
                 'principal','producer','psychologist','psychiatrist','registrar','referee',
                 'singer','songwriter','statistician','stockbroker','tailor','teller','tutor',
@@ -102,7 +102,7 @@ def named_entity_recognition(stopwords_free_sentences_list):
             money_list.append(NER_list[i][0])
         elif NER_list[i][1]=='PERCENT':
             percent_list.append(NER_list[i][0])
-        elif NER_list[i][0] in profession:       #Profession name list
+        elif NER_list[i][0].lower() in profession:       #Profession name list
             profession_name_list.append(NER_list[i][0])
 
 

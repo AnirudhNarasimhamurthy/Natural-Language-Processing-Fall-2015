@@ -17,10 +17,7 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
 
     # Declaring globals to be used in this function
 
-    master_person_list=[]
     sent_score_list=[]
-
-    #print 'Question is :',cleansedQuestion
 
     temp_q=cleansedQuestion
     temp_q=temp_q.replace('"','')
@@ -31,26 +28,17 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
 
     q_person_list,q_org_list,q_loc_list,q_month_list,q_time_list,q_money_list,q_percent_list,q_prof_list = NER.named_entity_recognition(temp_q)
 
-    #print 'Q Person list:' ,q_person_list
-    #print 'Q Prof list:',q_prof_list
-
-    #print 'Master person list is:',sent_person_list
-
     for i in range(0, len(complete_sentence_list)):
         #print 'Sentence is :', complete_sentence_list[i]
         score=0
 
         # 1. Score using word match rule. Match words in question with the words in stop free sentence
 
-        #wordmatch_score_list.append(WM.stemWordMatch(cleansedQuestion,sentence_list[i]))
         #print 'Sentence is :',sentence_list[i]
         score=score + WM.stemWordMatch(cleansedQuestion,sentence_list[i])
 
         # 2. If question does not contain name but the answer contains NAME then you are confident(+6)
-        #q_person_list,q_org_list,q_loc_list,q_month_list,q_time_list,q_money_list,q_percent_list,q_prof_list = NER.named_entity_recognition(cleansedQuestion)
         if q_person_list==[]:
-            #sent_person_list,sent_org_list,sent_loc_list,sent_month_list,sent_time_list,sent_money_list,sent_percent_list,sent_prof_list=NER.named_entity_recognition(complete_sentence_list[i])
-            #master_person_list.append((sent_person_list,i))
 
             #Giving more weights to sentences having more names in it
             if sent_person_list[i] !=[] or sent_prof_list[i] !=[]:
@@ -64,10 +52,8 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
                 if lmtzr.lemmatize(temp[k].lower())=='name':
                     score=score + 4
 
-
-
             #  4. Awards points to all sentences  that contain a name or reference to a human
-            #sent_plist,sent_olist,sent_llist,sent_tlist,sent_proflist=NER.named_entity_recognition(sentence_list[i])
+
             if sent_person_list[i] !=[] or sent_prof_list[i] !=[]:
                 #score=score + 4*len(sent_person_list) + 4* len(sent_prof_list)
                 score=score+4
@@ -131,12 +117,9 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
         #Cleaning up the candidate sentence
         # Replacing double quotes with blank and single quotes with "
         temp_str=temp_str.replace('"','')
-        temp_str=temp_str.replace("'",'"')
+        #temp_str=temp_str.replace("'",'"')
         temp_str=temp_str.replace(',','').replace('?','').replace('!','')
-        #temp_str=temp_str.replace('?','')
-        #temp_str=temp_str.replace('!','')
 
-        #print 'Temp str is :',temp_str
 
     # If there are multiple candidates, then choose the sentence which appeared first in the story  and then do the processing
     else:
@@ -146,12 +129,11 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
             #Cleaning up the candidate sentence
 
             temp_str=candidate_list[k][0]
-            #index =candidate_list[k][1]
+            index =candidate_list[k][1]
             temp_str=temp_str.replace('"','')
-            temp_str=temp_str.replace("'",'"')
+            #temp_str=temp_str.replace("'",'"')
             temp_str=temp_str.replace(',','').replace('?','').replace('!','')
-            #temp_str=temp_str.replace('?','')
-            #temp_str=temp_str.replace('!','')
+
 
             break
 
@@ -159,9 +141,9 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
 
     #Just pick out the noun-phrase or PERSON names from the sentence
 
-    s_plist,s_orglist,s_loclist,s_monthlist,s_timelist,s_moneylist,s_percentlist,s_proflist=NER.named_entity_recognition(temp_str)
-    #s_plist=sent_person_list[index]
-    #s_proflist=sent_prof_list[index]
+    #s_plist,s_orglist,s_loclist,s_monthlist,s_timelist,s_moneylist,s_percentlist,s_proflist=NER.named_entity_recognition(temp_str)
+    s_plist=sent_person_list[index]
+    s_proflist=sent_prof_list[index]
 
     print 'Prof list is:',s_proflist
 
@@ -169,11 +151,11 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
     #the name of a person but it should not be the name of the person appearing in the question.
     #If we can't find any other name in the candidate sentence then we do POS tagging and display the NOUN phrases
 
-    #flag=0
     print 'Question person list is:',q_person_list
     print 'Sentence person list is:',s_plist
 
     result_list=[]
+    q_loc_who_list=[]
 
     if q_person_list==[] and s_plist==[]:   #If both the question does not have a name and the sentence does not have a name,print the whole sentence minus words which appear in question
 
@@ -191,13 +173,11 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
 
         return ' '.join(result_list)
 
-    for i in range(0, len(s_plist)):
-        if s_plist[i] not in q_person_list and s_plist[i] not in temp_q:  #To counter situations where question has a name and NER doesn't identify it
-            answer_list.append(s_plist[i])
+    elif q_person_list==[] and s_plist !=[]:
+        for i in range(0, len(s_plist)):
+            if s_plist[i] not in q_person_list and s_plist[i] not in temp_q:  #To counter situations where question has a name and NER doesn't identify it
+                answer_list.append(s_plist[i])
 
-
-    '''if answer_list !=[]:
-        flag=1'''
 
     if q_person_list != [] and s_proflist !=[]:  #To counter situations for 'Who is X' type questions which could have a profession name in the answer
         for k in s_proflist:
@@ -205,6 +185,13 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
     elif q_person_list==[] and s_proflist !=[]:
         for k in s_proflist:
             answer_list.append(k)
+    elif q_person_list==[] and q_loc_list !=[]: # Who is <X> where ?
+        print 'Question has no name but has a location'
+        for k in temp_str.split():
+            if k not in temp_q:
+                q_loc_who_list.append(k)
+        if q_loc_who_list !=[]:
+            return ' '.join(q_loc_who_list)
 
 
 
@@ -230,101 +217,3 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
     #print 'Result is:',result
     return result
 
-    '''elif q_plist != [] or q_proflist != []:
-        #print candidate_list[0][1]
-        s_plist,s_olist,s_llist,s_tlist,s_proflist=NET.named_entity_tagging(candidate_list[0][0])
-        result= ' '.join(s_plist)
-        #print ('Answer: ',result+'\n')
-        #print '\n'
-        return result
-
-    elif q_plist != [] or q_proflist == []:  # Implies question has a name. So pick a sentence which has the same name in sentence which is present in question #
-        result=candidate_list[0][0]
-        #print ('Answer: ',result+'\n')
-        #print '\n'
-        return result'''
-
-
-
-    # Checking to see if the question contains profession name. If so the answer should be a sentence containing a name and higher weights
-    # is given for the score from Rule 2. Else Rule 1 and Rule 2 are given equal weightage.
-
-    '''q_plist,q_olist,q_llist,q_tlist,q_proflist=NET.named_entity_tagging(stop_words_free_question)
-
-    #print 'q_proflist',q_proflist
-
-    if q_proflist !=[]:
-
-         ##### score =0.5 * name_score + 0.16667 * WordMatch score + 0.16667 * contains "name" score + 0.16667 * contains "person or name" score
-
-        for i in range(0,len(sentence_list)):
-            final_score=0.5 * sent_containing_person_score_list[i] + 0.25*wordmatch_score_list[i] + 0.125*sent_containing_name_score_list[i] + 0.125 * sent_containing_person_or_name_score_list[i]
-            candidate_list.append(final_score)
-
-        max_val= max(candidate_list)
-        sent_indices_list=[i for i, j in enumerate(candidate_list) if j == max_val]
-        if len(sent_indices_list) == 1:
-            result_sentence=sentence_list[sent_indices_list[0]]
-            master_result_list=master_person_list[sent_indices_list[0]]
-            #print master_result_list
-            #print q_proflist
-            for item in master_result_list:
-                if item.lower() not in q_proflist and item not in  stop_words_free_question:
-                    final_result_set.append(item)
-            #final_result_set = [item for item in master_result_list if item not in q_proflist]
-            #print 'index is :',final_result_set
-            print 'Final Result is :', ' '.join(final_result_set)
-            return ' '.join(final_result_set)
-
-        else:
-
-            for i in range(0,len(sent_indices_list)):
-                 master_result_list=master_person_list[sent_indices_list[i]]
-                 for item in master_result_list:
-                    if item.lower() not in q_proflist and item not in  stop_words_free_question:
-                        final_result_set.append(item)
-
-            print 'Final Result is :', ' '.join(final_result_set)
-            return ' '.join(final_result_set)
-    else:
-
-        # Question does not contain profession, so equal weightage to both 1 and 2.
-
-        ##### score =0.375 * name_score + 0.375 * WordMatch score + 0.125 * contains "name" score + 0.125 * contains "person or name" score
-
-        for i in range(0,len(sentence_list)):
-            final_score=0.375 * sent_containing_person_score_list[i] + 0.375*wordmatch_score_list[i] + 0.125*sent_containing_name_score_list[i] + 0.125 * sent_containing_person_or_name_score_list[i]
-            candidate_list.append(final_score)
-
-        max_val= max(candidate_list)
-        sent_indices_list=[i for i, j in enumerate(candidate_list) if j == max_val]
-
-        #print 'length of list:', len(sent_indices_list)
-        if len(sent_indices_list) == 1:
-            result_sentence=sentence_list[sent_indices_list[0]]
-            master_result_list=master_person_list[sent_indices_list[0]]
-            #print 'Final Result is :', result_sentence
-            print 'Final Result is :', ' '.join(master_result_list)
-            return ' '.join(master_result_list)
-
-
-        else:
-            final_sent_string=""
-            for j in range(0,len(sent_indices_list)):
-                final_sent_string = sentence_list[sent_indices_list[j]]
-                master_result_list=master_person_list[sent_indices_list[j]]
-                break
-
-
-            ## TODO LOOK OUT FOR THE NAMES IN THE FINAL_SENT_STRING AND PRINT THEM ALONE IN ANSWER
-
-            for item in master_result_list:
-                if item.lower() not in q_proflist and item not in  stop_words_free_question:
-                    final_result_set.append(item)
-            #final_result_set = [item for item in master_result_list if item not in q_proflist]
-            #print 'index is :',final_result_set
-            print 'Final Result is :', ' '.join(final_result_set)
-            return ' '.join(final_result_set)
-
-            #print 'Final Result is :', final_sent_string
-            #return final_sent_string'''
