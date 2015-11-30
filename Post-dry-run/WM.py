@@ -70,19 +70,13 @@ def stemWordMatch2(question,sentence):
 
 def stemWordMatch(question,sentence):
 
-    #snowball_stemmer = SnowballStemmer('english')
-
-    #print 'Inside stemWordMatch'
-
     lmtzr = WordNetLemmatizer()
 
     question_tokens = set(nltk.word_tokenize(question))
     sentence_tokens=set(nltk.word_tokenize(sentence))
 
-    #print 'Question is :',question_tokens
-    #print 'Sentence is :',sentence_tokens
     count=0
-    for i in sentence_tokens:
+    '''for i in sentence_tokens:
         #Finding the exact word match
         if lmtzr.lemmatize(i, 'v').lower() in  [lmtzr.lemmatize(x, 'v').lower() for x in question_tokens]:
             #print  'matching word is:',i
@@ -90,7 +84,21 @@ def stemWordMatch(question,sentence):
         elif i.lower() in [x.lower() for x in question_tokens]:
             print 'i is :',i
             count=count+3
+    #print 'Exact word match count is :',count'''
+
+    for i in sentence_tokens:
+        #Finding the exact word match
+
+        if i.lower() in [x.lower() for x in question_tokens]:
+            #print 'i is :',i
+            count=count+3
+        elif lmtzr.lemmatize(i, 'v').lower() in  [lmtzr.lemmatize(x, 'v').lower() for x in question_tokens]:
+            #print  'matching word is:',i
+            count=count+6
+
     #print 'Exact word match count is :',count
+
+
     return count
 
 

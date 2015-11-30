@@ -34,8 +34,12 @@ def pos_noun_tagging(sentence):
     POS_list=english_postagger.tag(sentence.split())
 
     for i in range(0, len(POS_list)):
+        if i==0:
+            if POS_list[i][1] in ['JJ']:
+                NP_list.append(POS_list[i][0])
         if POS_list[i][1] in ['NN','NNS','NNP','NNPS']:
             NP_list.append(POS_list[i][0])
+
 
 
     return NP_list

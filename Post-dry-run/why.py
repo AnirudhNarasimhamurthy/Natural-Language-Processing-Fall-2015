@@ -23,8 +23,8 @@ def answering_why(cleansedQuestion,stop_words_free_question,complete_sentence_li
     q_verblist=[]
 
 
-    stanford_stop_words_list=['a','an','and','are','as','at','be','buy','for','from',
-                          'has','he','in','is','it','its','of','on','that','the',
+    stanford_stop_words_list=['a','an','and','are','as','at','be','buy','do','for','from',
+                          'has','have','he','in','is','it','its','of','on','that','the',
                           'to','was','were','will','with']
 
     temp_q=cleansedQuestion
@@ -32,17 +32,17 @@ def answering_why(cleansedQuestion,stop_words_free_question,complete_sentence_li
     temp_q=temp_q.replace("'",'"')
     temp_q=temp_q.replace('?','')
 
-    print 'Question is :',temp_q
+    #print 'Question is :',temp_q
 
 
     lmtzr=WordNetLemmatizer()
     pos_list= POS_Tagging.pos_tagging(temp_q)
 
     for i in range(0, len(pos_list)):
-        if pos_list[i][1] in ['VB','VBD','VBZ','VBN'] and pos_list[i][0] not in stanford_stop_words_list:
+        if pos_list[i][1] in ['VB','VBD','VBZ','VBN','VBP'] and lmtzr.lemmatize(pos_list[i][0],'v') not in stanford_stop_words_list:
             q_verblist.append(lmtzr.lemmatize(pos_list[i][0],'v'))
 
-    print 'Question verb list is :',q_verblist
+    #print 'Question verb list is :',q_verblist
 
 
     # Find score for each sentence using word march score first
@@ -65,7 +65,7 @@ def answering_why(cleansedQuestion,stop_words_free_question,complete_sentence_li
             best.append((complete_sentence_list[i],i))
             best_sent_index.append(i)
 
-    print 'Best list is:',best
+    #print 'Best list is:',best
 
 
     # Finding indices of the best sentences
@@ -109,13 +109,13 @@ def answering_why(cleansedQuestion,stop_words_free_question,complete_sentence_li
         lmtzr=WordNetLemmatizer()
         for k in range(0, len(sent_pos_list)):
             if sent_pos_list[k][1] in ['VB','VBD','VBZ','VBN'] and lmtzr.lemmatize(sent_pos_list[k][0],'v') in q_verblist:
-                print 'Verb in question and sentence matches'
+                #print 'Verb in question and sentence matches'
                 score=score + 6
 
 
         sent_score_list[i]=score
 
-    print 'Sent score list values are:',sent_score_list
+    #print 'Sent score list values are:',sent_score_list
 
 
     # Selecting the sentence that has the maximum score.
@@ -132,16 +132,23 @@ def answering_why(cleansedQuestion,stop_words_free_question,complete_sentence_li
          if sent_score_list[i]==max_score_value:
                 final_sent_list.append(complete_sentence_list[i])
 
-    print 'Final list is:', final_sent_list
+    #print 'Final list is:', final_sent_list
 
     if len(final_sent_list) == 1:
-        for k in final_sent_list[0].split():
-            if k.lower() =='so':                         #If sentence contains "so", the answer is generally the words that come after so
-                index=final_sent_list[0].index("so")
-                return final_sent_list[0][index:]
-            if k.lower() =='because':                         #If sentence contains "so", the answer is generally the words that come after so
-                index=final_sent_list[0].index("because")
-                return final_sent_list[0][index:]
+        temp=final_sent_list[0].split()
+        for k in range(0, len(temp)):
+            if temp[k].lower() =='so':                         #If sentence contains "so", the answer is generally the words that come after so
+                #index=final_sent_list[0].index("so")
+                #return final_sent_list[0][k:]
+                return ' '.join(temp[k:])
+            if temp[k].lower() =='because':                         #If sentence contains "so", the answer is generally the words that come after so
+                #index=final_sent_list[0].index("because")
+                #return final_sent_list[0][k:]
+                return ' '.join(temp[k:])
+            if temp[k].lower() =='to':                         #If sentence contains "to", the answer is generally the words that come after so
+                #index=final_sent_list[0].index("to")
+                #return final_sent_list[0][k:]
+                return ' '.join(temp[k:])
 
         return final_sent_list[0]
 

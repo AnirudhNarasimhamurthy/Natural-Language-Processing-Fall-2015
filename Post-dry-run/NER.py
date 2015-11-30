@@ -30,10 +30,11 @@ def named_entity_recognition(stopwords_free_sentences_list):
           'recently','soon','age','ago','old','a little while ago','at this moment','in the near future','a long time ago','these days',
           'those days','way off in the future','in the past','nowadays','eventually','this morning','at this time',
           'later this evening','morning', 'evening','night','midnight','dawn','dusk','afternoon','noon','midday',
-          'am','pm','sunrise','sunset','lunchtime','teatime','dinnertime','interval','twilight','beginning',
+          'a.m.','p.m.','sunrise','sunset','lunchtime','teatime','dinnertime','interval','twilight','beginning',
           'hourly','nightly','daily','monthly','weekly','quarterly','yearly',
           'fall','winter','equinox','solstice',
           'january','february','march','april','may','june','july','august','september','october','november','december',
+          'jan', 'feb', 'mar', 'apr','may', 'jun', 'jul','aug','sep','oct','oct.','nov','dec',
           'years','year', 'month','months', 'day','days', 'week','weeks', 'hour','hours', 'minute','minutes', 'second','seconds',
           'fortnight','halfhour','quarter','quarter hour','half']
 

@@ -34,16 +34,17 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
     temp_q=temp_q.replace("'",'"')
     temp_q=temp_q.replace('?','')
 
-    print 'Question is :',temp_q
+    #print 'Question is :',temp_q
 
-    print 'Month list is :',month_list
+    #print 'Month list is :',month_list
+    #print 'Time list is :',time_list
     # 1. Check if the sentence contains "TIME" expression
 
 
     #print 'Time list is :',time_list
     for i in range(0,len(sentence_list)):
         score=0
-        #print 'Sentence is :',sentence_list[i]
+        #print 'Sentence is :',complete_sentence_list[i]
         if time_list[i] != [] or month_list[i]!= []: # Sentence contains a time expression
 
             # Now compute the wordmatch score
@@ -69,7 +70,10 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
         sent_score_list.append(score)
 
 
-    print 'Sent score list is :', sent_score_list
+        #4. Verb match ??
+
+
+    #print 'Sent score list is :', sent_score_list
 
 
     ##################### COMPUTING THE DATE LINE SCORE FOR THE QUESTION #####################
@@ -96,7 +100,7 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
         if temp_list[i].lower()=='story':
             dateline_score= dateline_score+20
 
-    print 'Date line score for the question is :',dateline_score
+    #print 'Date line score for the question is :',dateline_score
 
 
     # Selecting the sentence/sentences that has the maximum score.
@@ -109,7 +113,7 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
         if sent_score_list[i] == max_score_value:
             candidate_list.append((complete_sentence_list[i],i))
 
-    print 'Candidate list is :',candidate_list
+    #print 'Candidate list is :',candidate_list
 
     # Checking which of the scores is greater. IF score from sent_Score_list is greater than dateline score, then we find
     # the corresponding sentences and choose the best among them. Else we return the dateline as the result.
@@ -123,28 +127,27 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
             temp_str= candidate_list[0][0]
             index=candidate_list[0][1]
 
-            #Cleaning up the candidate sentence
-            # Replacing double quotes with blank and single quotes with "
-            temp_str=temp_str.replace('"','')
-            #temp_str=temp_str.replace("'",'"')
-            temp_str=temp_str.replace(',','').replace('?','').replace('!','')
 
         # If there are multiple candidates, then choose the sentence which appeared first in the story and then do the processing
         else:
             # There are more than one candidate sentences. Print the first sentence
             for k in range(0, len(candidate_list)):
 
-                temp_str=candidate_list[k][0]
-                index=candidate_list[k][1]
+                if month_list[candidate_list[k][1]] !=[]:                      #Rewarding sentences with month
 
-                #Cleaning up the candidate sentence
+                    #Cleaning up the candidate sentence
+                    temp_str=candidate_list[k][0]
+                    index=candidate_list[k][1]
+                    break
+                else:
+                    temp_str=candidate_list[0][0]
+                    index =candidate_list[0][1]
 
-                temp_str=temp_str.replace('"','')
-                #temp_str=temp_str.replace("'",'"')
-                temp_str=temp_str.replace(',','').replace('?','').replace('!','')
-
-                break
-
+         #Cleaning up the candidate sentence
+            # Replacing double quotes with blank and single quotes with "
+            temp_str=temp_str.replace('"','')
+            #temp_str=temp_str.replace("'",'"')
+            temp_str=temp_str.replace(',','').replace('?','').replace('!','')
 
         ################### SENTENCE PROCESSING #######################
 
@@ -154,8 +157,8 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
         s_monthlist=month_list[index]
         s_timelist=time_list[index]
 
-        print 'Month list:',s_monthlist
-        print 'Time list:', s_timelist
+        #print 'Month list:',s_monthlist
+        #print 'Time list:', s_timelist
 
 
         if s_monthlist == [] and s_timelist == []:    #The selected sentence does not seem to have a time or month expression, then print whole sentence  minus the words in the question
@@ -203,7 +206,7 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
                 if k.lower() in time_nos:
                     answer_list.append(k.lower())
 
-        print 'Answer list is :',set(answer_list)
+        #print 'Answer list is :',set(answer_list)
 
         temp_result=[]
 
@@ -221,50 +224,4 @@ def answering_when(cleansedQuestion,stop_words_free_question,complete_sentence_l
     else:
         result=dateline
         return result
-
-
-        # Now from the sentences extracting out the years or the date /time values alone and representing them
-        '''final_temp_list=[]
-        if len(final_sent_list) == 1:
-            temp=nltk.word_tokenize(final_sent_list[0])
-            for j in range(0, len(temp)):
-                if temp[j].lower() in when_time_values:
-                    #print 'year true'
-                    final_temp_list.append(temp[j])
-
-            if final_temp_list != []:
-                result=' '.join(final_temp_list)
-                #print ('Answer: ', result+'\n')
-                #print '\n'
-                return result
-            else:
-                #print ('Answer: ', final_sent_list[0]+'\n')
-                #print '\n'
-                return final_sent_list[0]
-        else:
-
-            for i in range(0,len(final_sent_list)):
-              temp=nltk.word_tokenize(final_sent_list[i])
-              for j in range(0, len(temp)):
-                if temp[j].lower() in when_time_values:
-                    #print 'year true'
-                    final_temp_list.append(temp[j])
-
-            if final_temp_list != []:
-                result=' '.join(final_temp_list)
-                #print ('Answer: ', result+'\n')
-                #print '\n'
-                return result
-            else:
-                #print ('Answer: ', ' '.join(final_sent_list)+'\n')
-                #print '\n'
-                return ' '.join(final_sent_list)
-
-    else:
-        result=dateline
-        #print ('Answer: ', result +'\n')
-        #print '\n'
-        return result'''
-
-
 

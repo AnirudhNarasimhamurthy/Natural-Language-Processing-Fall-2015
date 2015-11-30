@@ -16,6 +16,8 @@ import where
 import what
 import why
 import how
+import which
+import time
 
 
 from time import gmtime, strftime
@@ -31,6 +33,10 @@ stanford_stop_words_list=['a','an','and','are','as','at','be','buy','for','from'
                           'to','was','were','will','with']
 
 NER_list=[]
+
+
+#start = time.clock()
+start_time = time.time()
 
 ################ Getting the input file from the command line arguments ###########################
 
@@ -184,75 +190,50 @@ for i in range(1, len(data)):
         q_flag=0
         question_list.append(qIDList[i])
         for j in range(0, len(qWords)):
-            if qWords[j].lower()=='who':
-                #print 'Who question',cleansedqList[i]
+            if qWords[j].lower()=='who' or qWords[j].lower()=='whom'  :
                 q_flag=1
-                #answer_list.append(who.answering_who(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list)) #stopwords_free_sentences_list
                 result=who.answering_who(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,master_person_list,master_prof_list) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='what':
-                #what_list.append(cleansedqList[i])
                 q_flag=1
-                #answer_list.append(what.answering_what(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
-                #result=what.answering_what(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date) #stopwords_free_sentences_list
-
+                result=what.answering_what(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,master_time_list) #stopwords_free_sentences_list
                 break
             elif qWords[j].lower()=='when':
-                #who_list.append(cleansedqList[i])
                 q_flag=1
-                #answer_list.append(when.answering_when(cleansedqList[i],stopwords_free_questions_list[i],stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 result=when.answering_when(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date,master_month_list,master_time_list) #stopwords_free_sentences_list
 
                 break
             elif qWords[j].lower()=='where':
-                #where_list.append(cleansedqList[i])
                 q_flag=1
-                #answer_list.append(where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 result=where.answering_where(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date,master_loc_list) #stopwords_free_sentences_list
 
                 break
             elif qWords[j].lower()=='why':
-                #why_list.append(cleansedqList[i])
                 q_flag=1
-                #answer_list.append(why.answering_why(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
                 result=why.answering_why(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list) #stopwords_free_sentences_list
 
                 break
             elif qWords[j].lower()=='how':
-                #how_list.append(cleansedqList[i])
                 q_flag=1
-                print 'How type question'
-                #answer_list.append(how.answering_how(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date)) #stopwords_free_sentences_list
-                #result=how.answering_how(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,hline_date) #stopwords_free_sentences_list
+                result=how.answering_how(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list,master_time_list,master_percent_list) #stopwords_free_sentences_list
+                break
+            elif qWords[j].lower()=='which':
+                q_flag=1
+                result=which.answering_which(cleansedqList[i],stopwords_free_questions_list[i],sentences_list,stopwords_free_sentences_list)
                 break
             else:
                 answer_list.append('No answer')
                 #print 'Answer:  No answer'+'\n'
-        if q_flag == 0:
+        if result=="" and q_flag == 0:
             print 'Answer: No answer'+'\n'
         if result=="" and q_flag !=0:
             print 'Answer: No answer'+'\n'
         else:
             print 'Answer: ', result +'\n'
 
-    '''print 'Questions belonging to who list:', who_list
-    print 'Questions belonging to what list:', what_list
-    print 'Questions belonging to when list:', when_list
-    print 'Questions belonging to where list:', where_list
-    print 'Questions belonging to why_list:', why_list
-    print 'Questions belonging to how list:', how_list'''
-
-
-  
-####################### Building the response file #############################################
-
-'''with open ("AnswerResponse","w") as f:
-	for i in range(0, len(question_list)):
-            f.write(question_list[i])
-            f.write("\n")
-            f.write("Answer: ")
-            f.write(answer_list[i])
-            f.write("\n\n")'''
+#end = time.clock()
+#print "Time taken for execution is : %.2gs" % (end-start)
+print("---Execution time is %s seconds ---" % (time.time() - start_time))
 
 
 

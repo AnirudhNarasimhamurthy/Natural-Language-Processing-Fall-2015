@@ -24,7 +24,7 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
     temp_q=temp_q.replace("'",'"')
     temp_q=temp_q.replace('?','')
 
-    print 'Temp_q: ',temp_q
+    #print 'Temp_q: ',temp_q
 
     q_person_list,q_org_list,q_loc_list,q_month_list,q_time_list,q_money_list,q_percent_list,q_prof_list = NER.named_entity_recognition(temp_q)
 
@@ -87,7 +87,7 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
 
         sent_score_list.append(score)
 
-    print 'Sent score list is :',sent_score_list
+    #print 'Sent score list is :',sent_score_list
 
 
     # Selecting the sentence that has the maximum score. If it is a tie, we choose the sentence that appears first
@@ -105,7 +105,7 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
     for i in range(0, len(complete_sentence_list)):
         if sent_score_list[i]==max_score_value:
             candidate_list.append((complete_sentence_list[i],i))
-    print 'Candidate list is :',candidate_list
+    #print 'Candidate list is :',candidate_list
 
 
     #If there is only one sentence, then choose the sentence and then do the processing to display the answer
@@ -145,14 +145,14 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
     s_plist=sent_person_list[index]
     s_proflist=sent_prof_list[index]
 
-    print 'Prof list is:',s_proflist
+    #print 'Prof list is:',s_proflist
 
     #If the question has a name of person, then the answer sentence should/would most probably
     #the name of a person but it should not be the name of the person appearing in the question.
     #If we can't find any other name in the candidate sentence then we do POS tagging and display the NOUN phrases
 
-    print 'Question person list is:',q_person_list
-    print 'Sentence person list is:',s_plist
+    #print 'Question person list is:',q_person_list
+    #print 'Sentence person list is:',s_plist
 
     result_list=[]
     q_loc_who_list=[]
@@ -173,27 +173,33 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
 
         return ' '.join(result_list)
 
+    elif q_person_list !=[] and s_plist !=[]:    #To counter situations when both question and sentence has names Ex. Who defeated who ?
+        for k in s_plist:
+            if k not in temp_q:
+                answer_list.append(k)
+
+
     elif q_person_list==[] and s_plist !=[]:
         for i in range(0, len(s_plist)):
             if s_plist[i] not in q_person_list and s_plist[i] not in temp_q:  #To counter situations where question has a name and NER doesn't identify it
                 answer_list.append(s_plist[i])
 
 
-    if q_person_list != [] and s_proflist !=[]:  #To counter situations for 'Who is X' type questions which could have a profession name in the answer
+    elif q_person_list != [] and s_proflist !=[]:  #To counter situations for 'Who is X' type questions which could have a profession name in the answer
         for k in s_proflist:
             answer_list.append(k)
-    elif q_person_list==[] and s_proflist !=[]:
-        for k in s_proflist:
-            answer_list.append(k)
+
     elif q_person_list==[] and q_loc_list !=[]: # Who is <X> where ?
-        print 'Question has no name but has a location'
+        #print 'Question has no name but has a location'
         for k in temp_str.split():
             if k not in temp_q:
                 q_loc_who_list.append(k)
         if q_loc_who_list !=[]:
             return ' '.join(q_loc_who_list)
 
-
+    '''elif q_person_list==[] and s_proflist !=[]:
+        for k in s_proflist:
+            answer_list.append(k)'''
 
     if answer_list != [] :#and flag==1:                #Indicating candidate sentence has a name other than that in question
         result= ' '.join(answer_list)
@@ -207,7 +213,7 @@ def answering_who(cleansedQuestion,stop_words_free_question,complete_sentence_li
                 npfinal_list.append(x) #Removing all occurences of existing noun phrases from the question
 
 
-        print 'NP Final list after removal is',npfinal_list
+        #print 'NP Final list after removal is',npfinal_list
         if npfinal_list !=[]:
             result=' '.join(npfinal_list)
 
