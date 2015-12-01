@@ -1,0 +1,56 @@
+README
+=======
+
+Project Dry Run Submission:
+===========================
+
+Team Members: Anirudh Narasimhamurthy(u0941400) and Vulpala shiva Priya(u1011589)
+
+1. The source code files and all the required files have been put in the folder named "QA_Final". The main python
+program is qa.py.There are several other files which I have written and made use of in my program. All of them are
+referenced in the way such that all these files are at the same level on a directory.
+
+I have made use of nltk library and with help from  CADE Opers, we were able to use the installation and set it up.
+I am also making use of Stanford NER for Named Entity Recognition and Stanford POS Tagger, both of which have been added to the
+project directory and have been referenced in the program accordingly. You don't have to do anything with regards to that.
+All you need to do is just unzip my folder and type the below commands on the terminal from my directory
+
+i.e
+
+    Step 1: Unzip our submitted zip source
+    Step 2: Open terminal and navigate or do a  cd to our directory
+    Step 3: I have the testset1 folder inside the directory. Please copy paste the final set of test files folder into this location
+    and follow the convention used in testset1-inputfile while creating the input file for test set2
+    Step 3: To compile and run the code, please type the following:
+
+/usr/local/stow/python/amd64_linux26/python-2.7.3/bin/python2 qa.py testset1-inputfile.txt (For test set 1)
+
+To be more generic it would be
+
+/usr/local/stow/python/amd64_linux26/python-2.7.3/bin/python2 qa.py <input file> (For test set 2)
+
+Here qa.py is my source python file
+
+inputfile is the command line argument which contains the required input.
+Please keep in mind the path for the testset1 right now is pointing to the path in which I have my files in CADE machine,
+which is nothing but this folder.
+THe path has to be changed accordingly when you run it with new set of test cases.
+
+
+You can also do the following to copy the output to file
+
+/usr/local/stow/python/amd64_linux26/python-2.7.3/bin/python2 qa.py inputfile > output
+
+
+* Internally my code is now pointing to nltk_data folder of my cade user and I have provided access to users to this
+directory. So it should also work when you run it on your system under your CADE user. In case you encounter any issues
+kindly let me knwow and I could tell you what is required. My contact email is anirudhnmurthy@gmail.com
+
+I ran my program on CADE machine "lab2-12" and "lab2-7" for testset1 of all 39 files. The running time is anywhere
+between 1 hour to 2 hours depending on the time at which our programs are run for evaluation. When I ran it around 11P.M to
+3 A.M when there are relatively lesser number of users, it took around 1 hour. When I ran it around 3P.M to 7P.M it took close
+to 2 hours.
+
+
+In case you have any issues with running the code or encounter any errors during the execution let me know. I have tested it
+and it seems to be working fine.
