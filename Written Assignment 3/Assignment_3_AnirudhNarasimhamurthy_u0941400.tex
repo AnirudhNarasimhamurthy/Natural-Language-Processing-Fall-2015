@@ -1,0 +1,434 @@
+%-*- Mode:LaTeX; -*-      
+\documentclass[11pt]{article}
+\usepackage{vmargin}		% Force narrower margins
+\setpapersize{USletter}
+\setmarginsrb{1.0in}{1.0in}{1.0in}{0.6in}{0pt}{0pt}{0pt}{0.4in}
+\setlength{\parskip}{.1in}  % removed space between paragraphs
+\setlength{\parindent}{0in}
+
+\usepackage{epsfig}
+\usepackage{graphicx}
+
+\begin{document}
+
+\large
+\begin{center}
+{\bf CS-5340/6340, Written Assignment \#3} \\
+{\bf DUE: Thursday, November 5, 2015 by 11:00pm}
+\end{center}
+\normalsize
+
+\begin{enumerate}  
+
+%% ===============================================================
+% QUESTION #1 : Basilisk
+%% =============================================================
+
+\item (20 pts) Answer  the questions below based on  the Basilisk
+  algorithm for  semantic class induction, using the seed words
+ for three semantic categories ({\sc animal}, {\sc vehicle},
+  and {\sc instrument}) and pattern data shown below. 
+ The table of pattern data includes four patterns and the nouns that
+ each pattern extracted  in an imaginary corpus.  For logarithms, use
+ log base 2. 
+
+\begin{quote}
+\hspace*{.5in} {\bf Animal Seeds:} jaguar, shark, walrus, zebra \\
+\hspace*{.5in} {\bf Instrument Seeds:} bass, flute, horn, violin \\
+\hspace*{.5in} {\bf Vehicle Seeds:} altima, impala, mustang, prius \\
+\end{quote}
+
+\begin{center}
+\begin{tabular}{ll} \hline
+\textbf{Pattern} & \textbf{Extracted Nouns} \\ \hline
+patternA & bass, bronco, dog, impala, jaguar, mustang, shark, tiger, zebra \\ 
+patternB & beetle, bronco, horn, jaguar, mustang, prius, tire \\ 
+patternC & bass, clarinet, flute, music, piano, sound, trumpet, violin \\ 
+patternD & accord, altima, bronco, jaguar, legacy, prius, sound \\ \hline 
+\end{tabular}
+\end{center}
+
+\vspace*{.2in}
+
+\begin{enumerate}
+\item Compute RlogF(patternA) for the {\sc animal} category. \\
+
+RlogF($pattern_i$)= $\frac{F_i}{N_i} * log_2 (F_i)$\\
+			    =$\frac{3}{9} * log_2(3)$\\
+			    =$ 0.33 * 1.584 $ \\
+			    = 0.52303\\	
+
+\item Compute RlogF(patternA) for the {\sc vehicle} category. \\
+
+
+RlogF($pattern_i$)= $\frac{F_i}{N_i} * log_2 (F_i)$\\
+			    =$\frac{2}{9} * log_2(2)$\\
+			    =$ 0.2222 * 1 $ \\
+			    = 0.2222\\	
+
+\item Compute RlogF(patternA) for the {\sc instrument} category. \\
+
+
+RlogF($pattern_i$)= $\frac{F_i}{N_i} * log_2 (F_i)$\\
+			    =$\frac{1}{9} * log_2(1)$\\
+			    =$ 0.11111 * 0$ \\
+			    = 0\\	
+
+
+\item Compute RlogF(patternB) for the {\sc animal} category. \\
+
+
+RlogF($pattern_i$)= $\frac{F_i}{N_i} * log_2 (F_i)$\\
+			    =$\frac{1}{7} * log_2(1)$\\
+			    =$ 0.14285 * 0 $ \\
+			    = 0\\	
+
+\item Compute RlogF(patternB) for the {\sc vehicle} category. \\
+
+
+RlogF($pattern_i$)= $\frac{F_i}{N_i} * log_2 (F_i)$\\
+			    =$\frac{2}{7} * log_2(2)$\\
+			    =$ 0.2857 * 1 $ \\
+			    = 0.2857142857\\	
+
+\item Compute RlogF(patternB) for the {\sc instrument} category. \\
+
+
+RlogF($pattern_i$)= $\frac{F_i}{N_i} * log_2 (F_i)$\\
+			    =$\frac{1}{7} * log_2(1)$\\
+			    =$ 0.14285 * 0 $ \\
+			    = 0\\	
+
+\item Compute AvgLog(``bronco'') for the {\sc animal} category. \\
+
+AvgLog($word_i$)= $\frac{\sum\limits_{j=1}^{N_i} log_2(F_j +1)}{N_i}$\\
+			=$\frac{log_2(3+1) + log_2(1+1) +log_2(1+1)}{3}$\\
+			=$\frac{2+1+1}{3}$\\
+			=1.33333\\
+				
+				
+
+\item Compute AvgLog(``bronco'') for the {\sc vehicle} category. \\
+
+AvgLog($word_i$)= $\frac{\sum\limits_{j=1}^{N_i} log_2(F_j +1)}{N_i}$\\
+			=$\frac{log_2(2+1) + log_2(2+1) +log_2(2+1)}{3}$\\
+			=$\frac{3log_2(3)}{3}$\\
+			=1.584963\\
+				
+
+
+\item Compute AvgLog(``sound'') for the {\sc instrument} category. \\
+
+AvgLog($word_i$)= $\frac{\sum\limits_{j=1}^{N_i} log_2(F_j +1)}{N_i}$\\
+			=$\frac{log_2(3+1) + log_2(0+1)}{2}$\\
+			=$\frac{log_2(4)}{2}$\\
+			=1\\
+
+
+\item Compute AvgLog(``sound'') for the {\sc vehicle} category. \\
+
+AvgLog($word_i$)= $\frac{\sum\limits_{j=1}^{N_i} log_2(F_j +1)}{N_i}$\\
+			=$\frac{log_2(0+1) + log_2(2+1)}{2}$\\
+			=$\frac{log_2(3)}{2}$\\
+			=0.7924815\\
+
+
+\end{enumerate}
+
+
+%% ===============================================================
+% QUESTION #2 : Distributional Similarity
+%% =============================================================
+
+\item (16 pts) Consider the following context vectors:
+
+\begin{quote}
+\hspace*{.5in} $word1$ : $<$5 3 4 0 7$>$ \\
+\hspace*{.5in} $word2$ : $<$6 8 0 2 1$>$  \\
+\hspace*{.5in} $word3$ : $<$2 7 1 5 4$>$ 
+\end{quote}
+
+Compute the similarity scores below using the word
+vectors above. Please leave your answers in fractional form!
+
+\begin{enumerate}
+\item Similarity($word1$, $word2$) using Manhattan Distance.  \\ 
+
+ManhattanDistance(X,Y)= $\sum\limits_{i=1}^{N} |x_i -y_i|$\\
+
+Similarity($word1$, $word2$)= $| (5-6)+(3-8)+(4-0)+(0-2)+(7-1) |$\\
+
+					    =18\\	
+
+\item Similarity($word2$, $word3$) using Manhattan Distance.  \\ 
+
+ManhattanDistance(X,Y)= $\sum\limits_{i=1}^{N} |x_i -y_i|$\\
+
+Similarity($word2$, $word3$)= $| (6-2)+(8-7)+(0-1)+(2-5)+(1-4) |$\\
+
+					    =12\\	
+
+\item Similarity($word1$, $word2$) using Jaccard Similarity.  \\ 
+
+Jaccard(X,Y)= $\frac{\sum\limits_{i=1}^{N} min(x_i,y_i)}{\sum\limits_{i=1}^{N} max(x_i,y_i)}$\\
+
+Similarity($word1$, $word2$)=$\frac{5+3+0+0+1}{6+8+4+2+7}$\\
+
+					    =$\frac{9}{27}$\\
+					    
+					    =$\frac{1}{3}$\\
+					    
+					    %=0.3333\\			  	
+
+\item Similarity($word2$, $word3$) using Jaccard Similarity.  \\ 
+
+Jaccard(X,Y)= $\frac{\sum\limits_{i=1}^{N} min(x_i,y_i)}{\sum\limits_{i=1}^{N} max(x_i,y_i)}$\\
+
+Similarity($word2$, $word3$)=$\frac{2+7+0+2+1}{6+8+1+5+4}$\\
+
+					    =$\frac{12}{24}$\\
+					    
+					    =$\frac{1}{2}$\\
+					    
+					    %=0.5\\	
+
+\item Similarity($word1$, $word2$) using Cosine Similarity.  \\ 
+Cosine(X,Y)=$\frac{\sum\limits_{i=1}^{N} (x_i * y_i)}{\sqrt{\sum\limits_{i=1}^{N} x_i^2} \sqrt{\sum\limits_{i=1}^{N} y_i^2}}$\\ 
+
+Similarity($word1$, $word2$)=$\frac{5*6 +3*8+4*0+0*2+7*1}{\sqrt{25+9+16+0+49} \sqrt{36+64+0+4+1}}$\\
+
+=$\frac{61}{\sqrt{99} \sqrt{105}}$\\
+
+=0.5982980511087747\\
+
+
+\item Similarity($word2$, $word3$) using Cosine Similarity.  \\ 
+
+Cosine(X,Y)=$\frac{\sum\limits_{i=1}^{N} (x_i * y_i)}{\sqrt{\sum\limits_{i=1}^{N} x_i^2} \sqrt{\sum\limits_{i=1}^{N} y_i^2}}$\\ 
+
+Similarity($word2$, $word3$)=$\frac{6*2 +8*7+0*1+2*5+1*4}{\sqrt{36+64+0+4+1} \sqrt{4+49+1+25+16}}$\\
+
+=$\frac{82}{\sqrt{105} \sqrt{95}}$\\
+
+=0.82102692\\
+
+\end{enumerate}
+
+
+\newpage
+%% =================================================================
+%% QUESTION #3 : Collins & Singer Named Entity Recognition
+%% =================================================================
+\item (32 pts) This question relates to the Collins \& Singer
+  bootstrapping method for named entity recognition.  The predicate
+  Contains($w$) is satisfied if a sequence of words includes the word
+  $w$. TABLE 1 shows contains NP/Context pairs extracted
+  from an imaginary text corpus, with their labels for two classes:
+  {\sc human (hum)} and {\sc location (loc)}. 
+
+\begin{center}
+\textbf{TABLE 1} \\
+~ \\
+\begin{tabular}{|lll|} \hline
+\textbf{NP}  & \textbf{CONTEXT} & \textbf{CLASS} \\ \hline
+michael jordan & nike spokesman & {\sc hum} \\
+jordan south & nike client & {\sc hum} \\
+jeff jordan & circuit city ceo  & {\sc hum} \\ 
+michael jordan & nike ceo  & {\sc hum} \\ 
+jeff west & ceo  & {\sc hum} \\ 
+south salt lake & mall in & {\sc loc} \\
+jordan & country & {\sc loc} \\
+south jordan & city & {\sc loc} \\ 
+salt lake & capital city & {\sc loc} \\
+west jordan & mall in & {\sc loc} \\ 
+\hline
+\end{tabular}
+\end{center}
+
+\begin{enumerate}
+\item (14 pts) Using the Contains($w$) predicate, list all of the 
+{\bf NP Rules} that would be generated from the NPs in TABLE
+  1 and compute the probabilities P({\sc hum}) and P({\sc loc}) for each
+  rule. \textbf{Leave the probabilities in   fractional form!}  \\ 
+
+   \begin{center} 
+    \begin{tabular}{lll} 
+   \textbf{NP Rule~~~~~~~~~~~~~~~~~~~~~~~~~~~~~} &
+   \textbf{P({\sc hum)~~~~~~~}} & \textbf{P({\sc loc})} \\ \hline
+  michael   ~ & 2/2 & 0/2 \\ \hline
+  jordan  ~ & 4/7 & 3/7 \\ \hline
+ south   ~ & 1/3 & 2/3 \\ \hline
+jeff  ~ & 2/2 & 0/2 \\ \hline
+  west  ~ & 1/2 & 1/2 \\ \hline
+  salt   ~ &  0/2 & 2/2 \\ \hline
+  lake   ~ & 0/2 &  2/2\\ \hline
+
+   \end{tabular}
+   \end{center}
+ \vspace*{.2in}
+
+
+\newpage
+\item (6 pts) List the NP rules that would be produced by selecting
+  rules from the table above that would have a probability $>$ .60. Then apply these NP rules to the
+  instances in TABLE 2 below (i.e., fill in  TABLE 2 with the class
+  label that would be assigned to each instance). If no class
+  would be assigned, simply put {\it none}. \\
+
+NP rules that would be produced by selecting rules from the table above that would have a probability $>$ 0.60 \\
+
+   \begin{center} 
+    \begin{tabular}{lll} 
+   \textbf{NP Rule~~~~~~~~~~~~~~~~~~~~~~~~~~~~~} &
+   \textbf{P({\sc hum)~~~~~~~}} & \textbf{P({\sc loc})} \\ \hline
+  michael   ~ & 2/2 &  \\ \hline
+ south   ~ &  & 2/3 \\ \hline
+jeff  ~ & 2/2 &  \\ \hline
+  salt   ~ &   & 2/2 \\ \hline
+  lake   ~ &  &  2/2\\ \hline
+
+   \end{tabular}
+   \end{center}
+ \vspace*{.2in}
+
+
+
+ \begin{center}
+ \textbf{TABLE 2} \\  ~ \\
+ \begin{tabular}{|lll|} \hline
+ \textbf{NP}  & \textbf{CONTEXT} & \textbf{~~~~~~CLASS~~~~~} \\ \hline
+ ken jordan & south lake corp & {~~~~~~\it{none}~~~~~} \\ 
+ jeff jones &  west corp ceo &  {~~~~~~\sc hum~~~~~} \\ 
+ adam west & salt lake  &   {~~~~~~\it none~~~~~}\\ 
+ michael south  & ceo  &  {~~~~~~\sc hum~~~~~}  \\ 
+ south salton sea   & lake &   {~~~~~~\sc loc~~~~~} \\ 
+ mirror lake & west   &   {~~~~~~\sc loc~~~~~} \\ \hline 
+ \end{tabular}
+ \end{center}
+ \vspace*{.2in}
+
+We assign the class of the NP 'michael south' as HUM because the probability of micheal being human (1) is greater than the probability of south being a location (0.66)
+
+\item (12 pts) Using the Contains($w$) predicate, list all of the 
+\textbf{Context Rules} that would be generated from the CONTEXTS in TABLE
+  2 and compute the probabilities P({\sc hum}) and P({\sc loc}) for
+  each rule (using the class labels that you assigned). 
+\textbf{Leave the     probabilities in fractional form!}  \\
+
+   \begin{center} 
+    \begin{tabular}{lll} 
+   \textbf{Context Rule~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~} &
+   \textbf{P({\sc hum)~~~~~~~~~}} & \textbf{P({\sc loc})} \\ \hline
+   south    ~ &  -- -- &  -- --\\ \hline
+   lake   ~ & 0/1 & 1/1 \\ \hline
+   corp    ~ & 1/1 & 0/1 \\ \hline
+   west    ~ & 1/2 & 1/2 \\ \hline
+   ceo    ~ & 2/2 & 0/2\\ \hline
+   salt    ~ & -- -- & -- -- \\ \hline
+   \end{tabular}
+   \end{center}
+ \vspace*{.2in}
+
+
+\end{enumerate}
+
+\newpage
+%% ===============================================================
+% QUESTION #4 : Semantic Roles
+%% =============================================================
+
+\item (26 pts) For each sentence below, label the head noun of each noun
+  phrase (NP) with the thematic role that is most appropriate based on its
+  semantic relationship with the main verb.  
+
+\begin{enumerate}
+
+\item Jenny sold a diamond necklace with a matching diamond bracelet to
+  the actress.  \\ 
+  
+  (Jenny)/ {AGENT} sold a diamond (necklace) / {THEME} with a matching (bracelet) / {CO-THEME} to the (actress) / {RECIPIENT} \\
+
+\item The man repaired the broken pipe with duct tape.  \\ 
+
+The (man) / {AGENT} repaired the broken (pipe) /{THEME} with duct (tape) / {INSTRUMENT} \\
+
+\item Susan lent Thomas her car on Monday.  \\ 
+
+(Susan) / {AGENT} lent (Thomas) / {RECIPIENT} her (car) / {THEME} on (Monday) / {TIME} \\
+
+\item The musician played his trumpet for President Obama.   \\ 
+
+The (musician) / {AGENT} played his (trumpet) / {THEME} for President (Obama) / {BENEFICIARY} \\
+
+\item The girl is hiking with her sister from Logan to Pocatello. \\ 
+
+The (girl) / {AGENT} is hiking with her (sister) /{CO-AGENT} from (Logan) {SOURCE/ ORIGIN/ FROM-LOC} to (Pocatello) {DESTINATION /TO -LOC } \\
+
+\item The boat sank with its ten passengers.  \\ 
+
+The (boat) / {THEME} sank with its ten (passengers)/ {CO-THEME} \\
+
+\item The bird flew along the mountain trail with its powerful
+  wings. \\ 
+  
+  The (bird) / {AGENT} flew along the mountain (trail) / {PATH-LOC} with its powerful (wings) /{INSTRUMENT} \\
+
+\item The Disney movie was watched by three parents with their
+  children. \\ 
+  
+  The Disney (Movie) / {THEME} was watched by three (parents) / {AGENT} with their (children) / {CO-AGENT} \\
+
+\end{enumerate}
+
+%% ===============================================================
+% QUESTION #5 : PMI
+%% =============================================================
+
+\item (6 pts) Imagine that you have 5 tiny documents that each
+  contains just a few words, which are shown below. 
+
+\begin{quote}
+\textbf{DOC \#1:} {\it natural} {\it language} {\it processing} {\it rules} \\
+\textbf{DOC \#2:} {\it natural} {\it food} {\it book} \\
+\textbf{DOC \#3:} {\it natural} {\it gas} \\
+\textbf{DOC \#4:} {\it natural} {\it language} {\it book} \\
+\textbf{DOC \#5:} {\it language} {\it rules} {\it book}
+\end{quote}
+
+Using these documents, compute the Pointwise Mutual
+Information (PMI) values below. Each probability P($x$) should be the likelihood of
+$x$ occurring in a document. For example, P({\it food}) means the probability
+that a document will contain the word {\it food}. You must fill in the
+equation as well as show the final value.  \\ ~ \\
+
+\begin{enumerate}
+\item PMI({\it language},{\it rules}) \\ 
+PMI(f,w) = $log_2 (P(f,w) / (P(w)*P(f))) $\\
+
+=$log_2( 2/5 / (2/5 *3/5) )$\\
+
+=$log_2(5/3)$\\
+
+=0.7369078852103839\\
+
+
+\item PMI({\it natural},{\it book})
+
+PMI(f,w) = $log_2 (P(f,w) / (P(w)*P(f))) $\\
+
+=$log_2( 2/5 / (3/5 *4/5) )$\\
+
+=$log_2(5/6)$\\
+
+= -0.2630344058337938\\
+
+
+\end{enumerate}
+
+
+
+\end{enumerate}  % END OF WRITTEN QUESTIONS
+
+\end{document}
+
+
